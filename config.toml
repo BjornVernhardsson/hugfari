@@ -1,4 +1,4 @@
-baseurl = "https://www.hugfari.com"
+baseurl = "https://bjornvernhardsson.github.io/hugfari/"
 title = "Hugfari"
 theme = "hugo-universal-theme"
 languageCode = "en-us"
