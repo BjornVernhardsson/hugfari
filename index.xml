@@ -2,648 +2,295 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hugfari</title>
-    <link>https://www.hugfari.com/</link>
+    <link>https://bjornvernhardsson.github.io/hugfari/</link>
     <description>Recent content on Hugfari</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 10 Oct 2015 13:07:31 +0200</lastBuildDate>
-    <atom:link href="https://www.hugfari.com/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 02 Oct 2015 21:49:20 +0200</lastBuildDate>
+    <atom:link href="https://bjornvernhardsson.github.io/hugfari/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>Migrate from Jekyll</title>
-      <link>https://www.hugfari.com/blog/2015/10/10/migrate-from-jekyll/</link>
-      <pubDate>Sat, 10 Oct 2015 13:07:31 +0200</pubDate>
-      
-      <guid>https://www.hugfari.com/blog/2015/10/10/migrate-from-jekyll/</guid>
-      <description>
-
-&lt;h2 id=&#34;move-static-content-to-static&#34;&gt;Move static content to &lt;code&gt;static&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;Jekyll has a rule that any directory not starting with &lt;code&gt;_&lt;/code&gt; will be copied as-is to the &lt;code&gt;_site&lt;/code&gt; output. Hugo keeps all static content under &lt;code&gt;static&lt;/code&gt;. You should therefore move it all there.
-With Jekyll, something that looked like&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;▾ &amp;lt;root&amp;gt;/
-    ▾ images/
-        logo.png
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;should become&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;▾ &amp;lt;root&amp;gt;/
-    ▾ static/
-        ▾ images/
-            logo.png
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Additionally, you&amp;rsquo;ll want any files that should reside at the root (such as &lt;code&gt;CNAME&lt;/code&gt;) to be moved to &lt;code&gt;static&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;create-your-hugo-configuration-file&#34;&gt;Create your Hugo configuration file&lt;/h2&gt;
-
-&lt;p&gt;Hugo can read your configuration as JSON, YAML or TOML. Hugo supports parameters custom configuration too. Refer to the &lt;a href=&#34;https://www.hugfari.com/overview/configuration/&#34;&gt;Hugo configuration documentation&lt;/a&gt; for details.&lt;/p&gt;
-
-&lt;h2 id=&#34;set-your-configuration-publish-folder-to-site&#34;&gt;Set your configuration publish folder to &lt;code&gt;_site&lt;/code&gt;&lt;/h2&gt;
-
-&lt;p&gt;The default is for Jekyll to publish to &lt;code&gt;_site&lt;/code&gt; and for Hugo to publish to &lt;code&gt;public&lt;/code&gt;. If, like me, you have &lt;a href=&#34;http://blog.blindgaenger.net/generate_github_pages_in_a_submodule.html&#34;&gt;&lt;code&gt;_site&lt;/code&gt; mapped to a git submodule on the &lt;code&gt;gh-pages&lt;/code&gt; branch&lt;/a&gt;, you&amp;rsquo;ll want to do one of two alternatives:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;Change your submodule to point to map &lt;code&gt;gh-pages&lt;/code&gt; to public instead of &lt;code&gt;_site&lt;/code&gt; (recommended).&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;git submodule deinit _site
-git rm _site
-git submodule add -b gh-pages git@github.com:your-username/your-repo.git public
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Or, change the Hugo configuration to use &lt;code&gt;_site&lt;/code&gt; instead of &lt;code&gt;public&lt;/code&gt;.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{
-    ..
-    &amp;quot;publishdir&amp;quot;: &amp;quot;_site&amp;quot;,
-    ..
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&#34;convert-jekyll-templates-to-hugo-templates&#34;&gt;Convert Jekyll templates to Hugo templates&lt;/h2&gt;
-
-&lt;p&gt;That&amp;rsquo;s the bulk of the work right here. The documentation is your friend. You should refer to &lt;a href=&#34;http://jekyllrb.com/docs/templates/&#34;&gt;Jekyll&amp;rsquo;s template documentation&lt;/a&gt; if you need to refresh your memory on how you built your blog and &lt;a href=&#34;https://www.hugfari.com/layout/templates/&#34;&gt;Hugo&amp;rsquo;s template&lt;/a&gt; to learn Hugo&amp;rsquo;s way.&lt;/p&gt;
-
-&lt;p&gt;As a single reference data point, converting my templates for &lt;a href=&#34;http://heyitsalex.net/&#34;&gt;heyitsalex.net&lt;/a&gt; took me no more than a few hours.&lt;/p&gt;
-
-&lt;h2 id=&#34;convert-jekyll-plugins-to-hugo-shortcodes&#34;&gt;Convert Jekyll plugins to Hugo shortcodes&lt;/h2&gt;
-
-&lt;p&gt;Jekyll has &lt;a href=&#34;http://jekyllrb.com/docs/plugins/&#34;&gt;plugins&lt;/a&gt;; Hugo has &lt;a href=&#34;https://www.hugfari.com/doc/shortcodes/&#34;&gt;shortcodes&lt;/a&gt;. It&amp;rsquo;s fairly trivial to do a port.&lt;/p&gt;
-
-&lt;h3 id=&#34;implementation&#34;&gt;Implementation&lt;/h3&gt;
-
-&lt;p&gt;As an example, I was using a custom &lt;a href=&#34;https://github.com/alexandre-normand/alexandre-normand/blob/74bb12036a71334fdb7dba84e073382fc06908ec/_plugins/image_tag.rb&#34;&gt;&lt;code&gt;image_tag&lt;/code&gt;&lt;/a&gt; plugin to generate figures with caption when running Jekyll. As I read about shortcodes, I found Hugo had a nice built-in shortcode that does exactly the same thing.&lt;/p&gt;
-
-&lt;p&gt;Jekyll&amp;rsquo;s plugin:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;module Jekyll
-  class ImageTag &amp;lt; Liquid::Tag
-    @url = nil
-    @caption = nil
-    @class = nil
-    @link = nil
-    // Patterns
-    IMAGE_URL_WITH_CLASS_AND_CAPTION =
-    IMAGE_URL_WITH_CLASS_AND_CAPTION_AND_LINK = /(\w+)(\s+)((https?:\/\/|\/)(\S+))(\s+)&amp;quot;(.*?)&amp;quot;(\s+)-&amp;gt;((https?:\/\/|\/)(\S+))(\s*)/i
-    IMAGE_URL_WITH_CAPTION = /((https?:\/\/|\/)(\S+))(\s+)&amp;quot;(.*?)&amp;quot;/i
-    IMAGE_URL_WITH_CLASS = /(\w+)(\s+)((https?:\/\/|\/)(\S+))/i
-    IMAGE_URL = /((https?:\/\/|\/)(\S+))/i
-    def initialize(tag_name, markup, tokens)
-      super
-      if markup =~ IMAGE_URL_WITH_CLASS_AND_CAPTION_AND_LINK
-        @class   = $1
-        @url     = $3
-        @caption = $7
-        @link = $9
-      elsif markup =~ IMAGE_URL_WITH_CLASS_AND_CAPTION
-        @class   = $1
-        @url     = $3
-        @caption = $7
-      elsif markup =~ IMAGE_URL_WITH_CAPTION
-        @url     = $1
-        @caption = $5
-      elsif markup =~ IMAGE_URL_WITH_CLASS
-        @class = $1
-        @url   = $3
-      elsif markup =~ IMAGE_URL
-        @url = $1
-      end
-    end
-    def render(context)
-      if @class
-        source = &amp;quot;&amp;lt;figure class=&#39;#{@class}&#39;&amp;gt;&amp;quot;
-      else
-        source = &amp;quot;&amp;lt;figure&amp;gt;&amp;quot;
-      end
-      if @link
-        source += &amp;quot;&amp;lt;a href=\&amp;quot;#{@link}\&amp;quot;&amp;gt;&amp;quot;
-      end
-      source += &amp;quot;&amp;lt;img src=\&amp;quot;#{@url}\&amp;quot;&amp;gt;&amp;quot;
-      if @link
-        source += &amp;quot;&amp;lt;/a&amp;gt;&amp;quot;
-      end
-      source += &amp;quot;&amp;lt;figcaption&amp;gt;#{@caption}&amp;lt;/figcaption&amp;gt;&amp;quot; if @caption
-      source += &amp;quot;&amp;lt;/figure&amp;gt;&amp;quot;
-      source
-    end
-  end
-end
-Liquid::Template.register_tag(&#39;image&#39;, Jekyll::ImageTag)
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;is written as this Hugo shortcode:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;!-- image --&amp;gt;
-&amp;lt;figure {{ with .Get &amp;quot;class&amp;quot; }}class=&amp;quot;{{.}}&amp;quot;{{ end }}&amp;gt;
-    {{ with .Get &amp;quot;link&amp;quot;}}&amp;lt;a href=&amp;quot;{{.}}&amp;quot;&amp;gt;{{ end }}
-        &amp;lt;img src=&amp;quot;{{ .Get &amp;quot;src&amp;quot; }}&amp;quot; {{ if or (.Get &amp;quot;alt&amp;quot;) (.Get &amp;quot;caption&amp;quot;) }}alt=&amp;quot;{{ with .Get &amp;quot;alt&amp;quot;}}{{.}}{{else}}{{ .Get &amp;quot;caption&amp;quot; }}{{ end }}&amp;quot;{{ end }} /&amp;gt;
-    {{ if .Get &amp;quot;link&amp;quot;}}&amp;lt;/a&amp;gt;{{ end }}
-    {{ if or (or (.Get &amp;quot;title&amp;quot;) (.Get &amp;quot;caption&amp;quot;)) (.Get &amp;quot;attr&amp;quot;)}}
-    &amp;lt;figcaption&amp;gt;{{ if isset .Params &amp;quot;title&amp;quot; }}
-        {{ .Get &amp;quot;title&amp;quot; }}{{ end }}
-        {{ if or (.Get &amp;quot;caption&amp;quot;) (.Get &amp;quot;attr&amp;quot;)}}&amp;lt;p&amp;gt;
-        {{ .Get &amp;quot;caption&amp;quot; }}
-        {{ with .Get &amp;quot;attrlink&amp;quot;}}&amp;lt;a href=&amp;quot;{{.}}&amp;quot;&amp;gt; {{ end }}
-            {{ .Get &amp;quot;attr&amp;quot; }}
-        {{ if .Get &amp;quot;attrlink&amp;quot;}}&amp;lt;/a&amp;gt; {{ end }}
-        &amp;lt;/p&amp;gt; {{ end }}
-    &amp;lt;/figcaption&amp;gt;
-    {{ end }}
-&amp;lt;/figure&amp;gt;
-&amp;lt;!-- image --&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;usage&#34;&gt;Usage&lt;/h3&gt;
-
-&lt;p&gt;I simply changed:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{% image full http://farm5.staticflickr.com/4136/4829260124_57712e570a_o_d.jpg &amp;quot;One of my favorite touristy-type photos. I secretly waited for the good light while we were &amp;quot;having fun&amp;quot; and took this. Only regret: a stupid pole in the top-left corner of the frame I had to clumsily get rid of at post-processing.&amp;quot; -&amp;gt;http://www.flickr.com/photos/alexnormand/4829260124/in/set-72157624547713078/ %}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;to this (this example uses a slightly extended version named &lt;code&gt;fig&lt;/code&gt;, different than the built-in &lt;code&gt;figure&lt;/code&gt;):&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{% fig class=&amp;quot;full&amp;quot; src=&amp;quot;http://farm5.staticflickr.com/4136/4829260124_57712e570a_o_d.jpg&amp;quot; title=&amp;quot;One of my favorite touristy-type photos. I secretly waited for the good light while we were having fun and took this. Only regret: a stupid pole in the top-left corner of the frame I had to clumsily get rid of at post-processing.&amp;quot; link=&amp;quot;http://www.flickr.com/photos/alexnormand/4829260124/in/set-72157624547713078/&amp;quot; %}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As a bonus, the shortcode named parameters are, arguably, more readable.&lt;/p&gt;
-
-&lt;h2 id=&#34;finishing-touches&#34;&gt;Finishing touches&lt;/h2&gt;
-
-&lt;h3 id=&#34;fix-content&#34;&gt;Fix content&lt;/h3&gt;
-
-&lt;p&gt;Depending on the amount of customization that was done with each post with Jekyll, this step will require more or less effort. There are no hard and fast rules here except that &lt;code&gt;hugo server --watch&lt;/code&gt; is your friend. Test your changes and fix errors as needed.&lt;/p&gt;
-
-&lt;h3 id=&#34;clean-up&#34;&gt;Clean up&lt;/h3&gt;
-
-&lt;p&gt;You&amp;rsquo;ll want to remove the Jekyll configuration at this point. If you have anything else that isn&amp;rsquo;t used, delete it.&lt;/p&gt;
-
-&lt;h2 id=&#34;a-practical-example-in-a-diff&#34;&gt;A practical example in a diff&lt;/h2&gt;
-
-&lt;p&gt;&lt;a href=&#34;http://heyitsalex.net/&#34;&gt;Hey, it&amp;rsquo;s Alex&lt;/a&gt; was migrated in less than a &lt;em&gt;father-with-kids day&lt;/em&gt; from Jekyll to Hugo. You can see all the changes (and screw-ups) by looking at this &lt;a href=&#34;https://github.com/alexandre-normand/alexandre-normand/compare/869d69435bd2665c3fbf5b5c78d4c22759d7613a...b7f6605b1265e83b4b81495423294208cc74d610&#34;&gt;diff&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Linked post</title>
-      <link>https://www.hugfari.com/blog/2015/10/02/linked-post/</link>
+      <title>AÐ MEÐHÖNDLA VONBRIGÐI BETUR</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2015/10/02/medhondlavonbrigdi/</link>
       <pubDate>Fri, 02 Oct 2015 21:49:20 +0200</pubDate>
       
-      <guid>https://www.hugfari.com/blog/2015/10/02/linked-post/</guid>
-      <description>&lt;p&gt;I&amp;rsquo;m a linked post in the menu. You can add other posts by adding the following line to the frontmatter:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;menu = &amp;quot;main&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit. In mauris nulla, vestibulum vel auctor sed, posuere eu lorem. Aliquam consequat augue ut accumsan mollis. Suspendisse malesuada sodales tincidunt. Vivamus sed erat ac augue bibendum porta sed id ipsum. Ut mollis mauris eget ligula sagittis cursus. Aliquam id pharetra tellus. Pellentesque sed tempus risus. Proin id hendrerit ante. Vestibulum vitae urna ut mauris ultricies dignissim. Ut ante turpis, tristique vitae sagittis quis, sagittis nec diam. Fusce pulvinar cursus porta. Vivamus maximus leo dolor, ut pellentesque lorem fringilla nec. Mauris faucibus turpis posuere sapien euismod, a ullamcorper mi maximus.&lt;/p&gt;
-
-&lt;p&gt;Morbi varius ex vel justo dictum placerat. Sed ac arcu pretium, varius elit eget, gravida purus. Fusce sit amet massa mollis eros tincidunt sollicitudin. Suspendisse iaculis cursus mauris ut sagittis. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas elit ligula, molestie quis magna eu, semper posuere lorem. Mauris a justo pharetra, congue ex eget, tincidunt massa. Maecenas sit amet neque lorem.&lt;/p&gt;
-
-&lt;p&gt;Curabitur at elementum quam. Curabitur tristique elit non sapien aliquam vulputate. Vivamus in odio tincidunt, tempor sem quis, tincidunt lacus. Mauris pulvinar nunc sed tempus dictum. Nam vel arcu quis mi fermentum ullamcorper non ac lacus. Donec aliquet vitae ante at imperdiet. Aenean scelerisque venenatis urna, eget elementum risus convallis ac. Nullam gravida arcu lacus, non consectetur augue pretium non. Duis dignissim eros id urna pretium congue. Nullam eu magna in sem sollicitudin tempor. Pellentesque vel convallis ligula. Quisque semper, turpis a rhoncus efficitur, magna nibh iaculis elit, eget tempor dolor eros ut mi. Maecenas eu placerat lacus. Praesent congue pretium nulla, sed suscipit metus rutrum vel.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Go is for lovers</title>
-      <link>https://www.hugfari.com/blog/2015/09/17/go-is-for-lovers/</link>
-      <pubDate>Thu, 17 Sep 2015 13:47:08 +0200</pubDate>
-      
-      <guid>https://www.hugfari.com/blog/2015/09/17/go-is-for-lovers/</guid>
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2015/10/02/medhondlavonbrigdi/</guid>
       <description>
 
-&lt;p&gt;Hugo uses the excellent &lt;a href=&#34;http://golang.org/&amp;gt;&#34;&gt;go&lt;/a&gt; &lt;a href=&#34;http://golang.org/pkg/html/template/&amp;gt;&#34;&gt;html/template&lt;/a&gt; library for
-its template engine. It is an extremely lightweight engine that provides a very
-small amount of logic. In our experience that it is just the right amount of
-logic to be able to create a good static website. If you have used other
-template systems from different languages or frameworks you will find a lot of
-similarities in go templates.&lt;/p&gt;
+&lt;p&gt;Vonbrigði kalla oft fram vanlíðan og vonleysi. Það eru eðlileg viðbrögð. Þetta er ekki besta tilfinning í heimi, en óneitanlega hluti af litrófi lífsins. Við verðum fyrir vonbrigðum þegar væntingar okkar bregðast, óháð því hvort væntingarnar séu háleitar eða einfaldar. Vonbrigði eru nauðsynleg skilaboð sem þarf að taka mark á og fara eftir. Þau geta sagt okkur hvort væntingarnar séu að drífa okkur áfram til góðra verka eða almennt of háleitar og jafnvel úr takti við raunveruleikann.&lt;/p&gt;
 
-&lt;p&gt;This document is a brief primer on using go templates. The &lt;a href=&#34;http://golang.org/pkg/html/template/&amp;gt;&#34;&gt;go docs&lt;/a&gt;
-provide more details.&lt;/p&gt;
+&lt;p&gt;Er verið að hlaupa hugsunarlaust eftir eigin sjálfsþótta í samskiptum við aðra? Þótt við séum ekki að fá það sem við viljum þarf það ekki endilega að þýða að verið sé að hafna okkur. Það er mikilvægt að setja hlutina í samhengi og skoða eigin afstöðu til samskipta við aðra.&lt;/p&gt;
 
-&lt;h2 id=&#34;introduction-to-go-templates&#34;&gt;Introduction to Go Templates&lt;/h2&gt;
+&lt;p&gt;Að finna fyrir bakslagi og finna til vonleysis er hluti af þroskaferli og við þurfum að fínstilla okkar viðbrögð við allri vanlíðan. Við þurfum að bregðast við en um leið þurfum við að læra að sjá okkur í samhengi við aðstæður. Að sjá heildarmyndina en einblína ekki á okkur sjálf í aðstæðunum.&lt;/p&gt;
 
-&lt;p&gt;Go templates provide an extremely simple template language. It adheres to the
-belief that only the most basic of logic belongs in the template or view layer.
-One consequence of this simplicity is that go templates parse very quickly.&lt;/p&gt;
+&lt;p&gt;Við höfum tilhneygingu til þess að einbeita okkur einhliða að málum sem eru sprottin af okkar sterkustu þörfum. Okkur finnst gjarnan allt vera undir þegar við erum að huga að makavali, starfsframa, eignum eða valdskiptingu. Einkunn fyrir próf skiptir máli áður en það hefst og í nokkurn tíma eftir að einkunn fæst en eiginlega aldrei síðar. Nema þegar við festumst í sjálfhverfunni. Einhliða sýn setur mikla pressu á samskipti við aðra, sérstaklega þá aðila sem eru okkur nánir. Við stillum okkur einhliða undir og okkur finnst við tapa ef við fáum ekki það fram sem við ætluðum.&lt;/p&gt;
 
-&lt;p&gt;A unique characteristic of go templates is they are content aware. Variables and
-content will be sanitized depending on the context of where they are used. More
-details can be found in the &lt;a href=&#34;http://golang.org/pkg/html/template/&amp;gt;&#34;&gt;go docs&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Ekki fóðra vonleysið lengi. Vanlíðan og vonleysi getur sprottið af huglægum og líkamlegum orsökum. Vonleysið virðist vera hluti af eðlilegu ferli þar sem hvíldin er notuð til að ná áttum og safna kröftum á svipaðan hátt og við virðumst gera eftir slys. Því einhliðari sem sýn okkar er, þeim mun meira verður áfallið og frekari líkur á sterkari vonleysisviðbrögðum.&lt;/p&gt;
 
-&lt;h2 id=&#34;basic-syntax&#34;&gt;Basic Syntax&lt;/h2&gt;
+&lt;p&gt;Hvernig má horfa til framtíðar?&lt;/p&gt;
 
-&lt;p&gt;Go lang templates are html files with the addition of variables and
-functions.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Go variables and functions are accessible within {{ }}&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Accessing a predefined variable &amp;ldquo;foo&amp;rdquo;:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ foo }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Parameters are separated using spaces&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Calling the add function with input of 1, 2:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ add 1 2 }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Methods and fields are accessed via dot notation&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Accessing the Page Parameter &amp;ldquo;bar&amp;rdquo;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ .Params.bar }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Parentheses can be used to group items together&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ if or (isset .Params &amp;quot;alt&amp;quot;) (isset .Params &amp;quot;caption&amp;quot;) }} Caption {{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;variables&#34;&gt;Variables&lt;/h2&gt;
-
-&lt;p&gt;Each go template has a struct (object) made available to it. In hugo each
-template is passed either a page or a node struct depending on which type of
-page you are rendering. More details are available on the
-&lt;a href=&#34;https://www.hugfari.com/layout/variables&#34;&gt;variables&lt;/a&gt; page.&lt;/p&gt;
-
-&lt;p&gt;A variable is accessed by referencing the variable name.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;title&amp;gt;{{ .Title }}&amp;lt;/title&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Variables can also be defined and referenced.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ $address := &amp;quot;123 Main St.&amp;quot;}}
-{{ $address }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;functions&#34;&gt;Functions&lt;/h2&gt;
-
-&lt;p&gt;Go template ship with a few functions which provide basic functionality. The go
-template system also provides a mechanism for applications to extend the
-available functions with their own. &lt;a href=&#34;https://www.hugfari.com/layout/functions&#34;&gt;Hugo template
-functions&lt;/a&gt; provide some additional functionality we believe
-are useful for building websites. Functions are called by using their name
-followed by the required parameters separated by spaces. Template
-functions cannot be added without recompiling hugo.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ add 1 2 }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;includes&#34;&gt;Includes&lt;/h2&gt;
-
-&lt;p&gt;When including another template you will pass to it the data it will be
-able to access. To pass along the current context please remember to
-include a trailing dot. The templates location will always be starting at
-the /layout/ directory within Hugo.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ template &amp;quot;chrome/header.html&amp;quot; . }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;logic&#34;&gt;Logic&lt;/h2&gt;
-
-&lt;p&gt;Go templates provide the most basic iteration and conditional logic.&lt;/p&gt;
-
-&lt;h3 id=&#34;iteration&#34;&gt;Iteration&lt;/h3&gt;
-
-&lt;p&gt;Just like in go, the go templates make heavy use of range to iterate over
-a map, array or slice. The following are different examples of how to use
-range.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 1: Using Context&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ range array }}
-    {{ . }}
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 2: Declaring value variable name&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{range $element := array}}
-    {{ $element }}
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 2: Declaring key and value variable name&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{range $index, $element := array}}
-    {{ $index }}
-    {{ $element }}
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;conditionals&#34;&gt;Conditionals&lt;/h3&gt;
-
-&lt;p&gt;If, else, with, or, &amp;amp; and provide the framework for handling conditional
-logic in Go Templates. Like range, each statement is closed with &lt;code&gt;end&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;Go Templates treat the following values as false:&lt;/p&gt;
+&lt;p&gt;Til að vinna sig úr vonleysinu og horfa bjartari augum á framtíðina er hægt að þjálfa sig í eftirfarandi atriðum&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;false&lt;/li&gt;
-&lt;li&gt;0&lt;/li&gt;
-&lt;li&gt;any array, slice, map, or string of length zero&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Þetta er spurning um lífsgæði en ekki lífsgæðakapphlaup. Að njóta þeirra hluta sem maður á, hvaða hlutir sem það svo eru, en keppast ekki um magn og hraða. Láttu ekki lífsgæðakapphlaupið fara með þínar tilfinningar og líðan langt niður.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Hagsmunir þurfa að vera í samræmi við framtíðarsýn og gott er að temja sér sátt við umhverfið, sérstaklega okkar nánustu. Ekki festast í einhliða sýn sem er miðuð við það sem „ég vil“.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Lærðu að þekkja þínar tilhneigingar. Ef þú ert haldin(n) sterkri þörf fyrir að láta aðstæður verða upp á líf og dauða eða sigur og tap er mikilvægt að skilja að slíkt er hluti af þróunarferlinu og að þetta snýst ekki um sekt eða skömm, rétt eða rangt.Að sjá von og framtíð þar sem það er til staðar. Það þurfa ekki allir blettirnir í kartöflugarðinum að njóta sólar, það getur verið að þar verði líka ágætisuppskera. Þótt sumt sé ekki eins og þú óskaðir geta aðrir hlutir verið í góðu lagi.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Virða samskiptin við aðra á svipaðan hátt og um grænmetisgarð væri að ræða. Setja niður og taka upp þegar rétti timinn er til þess, en ekki að rífa upp grösin í tíma og ótíma.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Virða val annarra og um leið manns eigið val. Raunveruleikaprófa valkosti á þann hátt að endanlegt val sé í samræmi við eigin óskir um það hvernig þú vilt að framtíðin sé.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Gerðu lista yfir framtíðarmarkmið þín. Skoðaðu einstök atriði sem geta fært þig nær þessum atriðum á eins hlutlægan hátt og þér er unnt.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Forðastu alhæfingar. Forðastu að setja þær aðstæður sem ollu þér vonbrigðum upp á þann hátt að þú hafir verið í aðalhlutverki og að þetta hafi allt snúist um þig.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Nýttu þér tækifærin sem upp koma. Allar aðstæður hafa einhver tækifæri.&lt;/p&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;strong&gt;Example 1: If&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;reiðistjórnun-og-meðhöndlun-vonbrigða&#34;&gt;Reiðistjórnun og meðhöndlun vonbrigða&lt;/h3&gt;
 
-&lt;pre&gt;&lt;code&gt;{{ if isset .Params &amp;quot;title&amp;quot; }}&amp;lt;h4&amp;gt;{{ index .Params &amp;quot;title&amp;quot; }}&amp;lt;/h4&amp;gt;{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Fyrir þá sem vilja fræðast meira um efnið geta spurst fyrir um námskeið í reiðistjórnun og meðhöndlun vonbrigða. Einstaklingar eru þar þjálfaðir í reiðistjórnun og hvernig best sé að takast á við vonbrigði og reiðiköst. Takmarkað sætamagn til að hægt sé að bjóða upp á einstaklingsmiðaða úrvinnslu.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Example 2: If -&amp;gt; Else&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Heimildir:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;{{ if isset .Params &amp;quot;alt&amp;quot; }}
-    {{ index .Params &amp;quot;alt&amp;quot; }}
-{{else}}
-    {{ index .Params &amp;quot;caption&amp;quot; }}
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 3: And &amp;amp; Or&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ if and (or (isset .Params &amp;quot;title&amp;quot;) (isset .Params &amp;quot;caption&amp;quot;)) (isset .Params &amp;quot;attr&amp;quot;)}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 4: With&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;An alternative way of writing &amp;ldquo;if&amp;rdquo; and then referencing the same value
-is to use &amp;ldquo;with&amp;rdquo; instead. With rebinds the context &lt;code&gt;.&lt;/code&gt; within its scope,
-and skips the block if the variable is absent.&lt;/p&gt;
-
-&lt;p&gt;The first example above could be simplified as:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ with .Params.title }}&amp;lt;h4&amp;gt;{{ . }}&amp;lt;/h4&amp;gt;{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 5: If -&amp;gt; Else If&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ if isset .Params &amp;quot;alt&amp;quot; }}
-    {{ index .Params &amp;quot;alt&amp;quot; }}
-{{ else if isset .Params &amp;quot;caption&amp;quot; }}
-    {{ index .Params &amp;quot;caption&amp;quot; }}
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;pipes&#34;&gt;Pipes&lt;/h2&gt;
-
-&lt;p&gt;One of the most powerful components of go templates is the ability to
-stack actions one after another. This is done by using pipes. Borrowed
-from unix pipes, the concept is simple, each pipeline&amp;rsquo;s output becomes the
-input of the following pipe.&lt;/p&gt;
-
-&lt;p&gt;Because of the very simple syntax of go templates, the pipe is essential
-to being able to chain together function calls. One limitation of the
-pipes is that they only can work with a single value and that value
-becomes the last parameter of the next pipeline.&lt;/p&gt;
-
-&lt;p&gt;A few simple examples should help convey how to use the pipe.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 1 :&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ if eq 1 1 }} Same {{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;is the same as&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ eq 1 1 | if }} Same {{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;It does look odd to place the if at the end, but it does provide a good
-illustration of how to use the pipes.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 2 :&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ index .Params &amp;quot;disqus_url&amp;quot; | html }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Access the page parameter called &amp;ldquo;disqus_url&amp;rdquo; and escape the HTML.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example 3 :&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{ if or (or (isset .Params &amp;quot;title&amp;quot;) (isset .Params &amp;quot;caption&amp;quot;)) (isset .Params &amp;quot;attr&amp;quot;)}}
-Stuff Here
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Could be rewritten as&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{  isset .Params &amp;quot;caption&amp;quot; | or isset .Params &amp;quot;title&amp;quot; | or isset .Params &amp;quot;attr&amp;quot; | if }}
-Stuff Here
-{{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;context-aka-the-dot&#34;&gt;Context (aka. the dot)&lt;/h2&gt;
-
-&lt;p&gt;The most easily overlooked concept to understand about go templates is that {{ . }}
-always refers to the current context. In the top level of your template this
-will be the data set made available to it. Inside of a iteration it will have
-the value of the current item. When inside of a loop the context has changed. .
-will no longer refer to the data available to the entire page. If you need to
-access this from within the loop you will likely want to set it to a variable
-instead of depending on the context.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  {{ $title := .Site.Title }}
-  {{ range .Params.tags }}
-    &amp;lt;li&amp;gt; &amp;lt;a href=&amp;quot;{{ $baseurl }}/tags/{{ . | urlize | lower  }}&amp;quot;&amp;gt;{{ . }}&amp;lt;/a&amp;gt; - {{ $title }} &amp;lt;/li&amp;gt;
-  {{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice how once we have entered the loop the value of {{ . }} has changed. We
-have defined a variable outside of the loop so we have access to it from within
-the loop.&lt;/p&gt;
-
-&lt;h1 id=&#34;hugo-parameters&#34;&gt;Hugo Parameters&lt;/h1&gt;
-
-&lt;p&gt;Hugo provides the option of passing values to the template language
-through the site configuration (for sitewide values), or through the meta
-data of each specific piece of content. You can define any values of any
-type (supported by your front matter/config format) and use them however
-you want to inside of your templates.&lt;/p&gt;
-
-&lt;h2 id=&#34;using-content-page-parameters&#34;&gt;Using Content (page) Parameters&lt;/h2&gt;
-
-&lt;p&gt;In each piece of content you can provide variables to be used by the
-templates. This happens in the &lt;a href=&#34;https://www.hugfari.com/content/front-matter&#34;&gt;front matter&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;An example of this is used in this documentation site. Most of the pages
-benefit from having the table of contents provided. Sometimes the TOC just
-doesn&amp;rsquo;t make a lot of sense. We&amp;rsquo;ve defined a variable in our front matter
-of some pages to turn off the TOC from being displayed.&lt;/p&gt;
-
-&lt;p&gt;Here is the example front matter:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;---
-title: &amp;quot;Permalinks&amp;quot;
-date: &amp;quot;2013-11-18&amp;quot;
-aliases:
-  - &amp;quot;/doc/permalinks/&amp;quot;
-groups: [&amp;quot;extras&amp;quot;]
-groups_weight: 30
-notoc: true
----
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here is the corresponding code inside of the template:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;  {{ if not .Params.notoc }}
-    &amp;lt;div id=&amp;quot;toc&amp;quot; class=&amp;quot;well col-md-4 col-sm-6&amp;quot;&amp;gt;
-    {{ .TableOfContents }}
-    &amp;lt;/div&amp;gt;
-  {{ end }}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;using-site-config-parameters&#34;&gt;Using Site (config) Parameters&lt;/h2&gt;
-
-&lt;p&gt;In your top-level configuration file (eg, &lt;code&gt;config.yaml&lt;/code&gt;) you can define site
-parameters, which are values which will be available to you in chrome.&lt;/p&gt;
-
-&lt;p&gt;For instance, you might declare:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&#34;language-yaml&#34;&gt;params:
-  CopyrightHTML: &amp;quot;Copyright &amp;amp;#xA9; 2013 John Doe. All Rights Reserved.&amp;quot;
-  TwitterUser: &amp;quot;spf13&amp;quot;
-  SidebarRecentLimit: 5
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Within a footer layout, you might then declare a &lt;code&gt;&amp;lt;footer&amp;gt;&lt;/code&gt; which is only
-provided if the &lt;code&gt;CopyrightHTML&lt;/code&gt; parameter is provided, and if it is given,
-you would declare it to be HTML-safe, so that the HTML entity is not escaped
-again.  This would let you easily update just your top-level config file each
-January 1st, instead of hunting through your templates.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{if .Site.Params.CopyrightHTML}}&amp;lt;footer&amp;gt;
-&amp;lt;div class=&amp;quot;text-center&amp;quot;&amp;gt;{{.Site.Params.CopyrightHTML | safeHtml}}&amp;lt;/div&amp;gt;
-&amp;lt;/footer&amp;gt;{{end}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;An alternative way of writing the &amp;ldquo;if&amp;rdquo; and then referencing the same value
-is to use &amp;ldquo;with&amp;rdquo; instead. With rebinds the context &lt;code&gt;.&lt;/code&gt; within its scope,
-and skips the block if the variable is absent:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;{{with .Site.Params.TwitterUser}}&amp;lt;span class=&amp;quot;twitter&amp;quot;&amp;gt;
-&amp;lt;a href=&amp;quot;https://twitter.com/{{.}}&amp;quot; rel=&amp;quot;author&amp;quot;&amp;gt;
-&amp;lt;img src=&amp;quot;/images/twitter.png&amp;quot; width=&amp;quot;48&amp;quot; height=&amp;quot;48&amp;quot; title=&amp;quot;Twitter: {{.}}&amp;quot;
- alt=&amp;quot;Twitter&amp;quot;&amp;gt;&amp;lt;/a&amp;gt;
-&amp;lt;/span&amp;gt;{{end}}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Finally, if you want to pull &amp;ldquo;magic constants&amp;rdquo; out of your layouts, you can do
-so, such as in this example:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;&amp;lt;nav class=&amp;quot;recent&amp;quot;&amp;gt;
-  &amp;lt;h1&amp;gt;Recent Posts&amp;lt;/h1&amp;gt;
-  &amp;lt;ul&amp;gt;{{range first .Site.Params.SidebarRecentLimit .Site.Recent}}
-    &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;{{.RelPermalink}}&amp;quot;&amp;gt;{{.Title}}&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
-  {{end}}&amp;lt;/ul&amp;gt;
-&amp;lt;/nav&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Pelusi, Nando. (2008). The Ups and Downs of Ambition. Psychology Today.May/June. Bls. 67.&lt;/p&gt;
 </description>
     </item>
     
     <item>
-      <title>Hugo is for lovers</title>
-      <link>https://www.hugfari.com/blog/2015/08/03/hugo-is-for-lovers/</link>
-      <pubDate>Mon, 03 Aug 2015 13:39:46 +0200</pubDate>
+      <title>FJÁRMÁLAFÍKN: FLÓTTI FRÁ SJÁLFSKYNJUN</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2015/10/02/fjarmalafikn/</link>
+      <pubDate>Fri, 02 Oct 2015 21:49:20 +0200</pubDate>
       
-      <guid>https://www.hugfari.com/blog/2015/08/03/hugo-is-for-lovers/</guid>
-      <description>
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2015/10/02/fjarmalafikn/</guid>
+      <description>&lt;p&gt;Það þarf að eiga sér stað vitundarvakning hvað varðar fjármálafíkn og þau skaðlegu áhrif sem hún hefur á fíkilinn, hans nánustu, samstarfsmenn hans og alla þá sem verða fyrir barðinu á hegðun fíkilsins.&lt;/p&gt;
 
-&lt;h2 id=&#34;step-1-install-hugo&#34;&gt;Step 1. Install Hugo&lt;/h2&gt;
+&lt;p&gt;Fyrsta skrefið er að horfast í augu við þráhyggjuna sem fylgir fíkninni, afneitunina gagnvart eigin hegðun og mótþróann við að takast á við vandamálið.&lt;/p&gt;
 
-&lt;p&gt;Goto &lt;a href=&#34;https://github.com/spf13/hugo/releases&#34;&gt;hugo releases&lt;/a&gt; and download the
-appropriate version for your os and architecture.&lt;/p&gt;
+&lt;p&gt;Þessir þættir standa helst í vegi fyrir því að fíkillinn viðurkenni hegðun sína og takist á við fíknina eða óstjórnanlegu hegðunina (Schaef, 1997).&lt;/p&gt;
 
-&lt;p&gt;Save it somewhere specific as we will be using it in the next step.&lt;/p&gt;
+&lt;p&gt;Eftir að búið er að viðurkenna vandamálið er hægt að skilgreina nánar óeðlilega hegðun með fjármuni. Nákvæmari skilgreining auðveldar okkur að sjá heildarmyndina og skilja óhjálplega fjármálahegðun og alls konar fjármálagerninga sem hluta af stærra vandamáli. Þegar heildarmyndin er skýr er loksins hægt að skoða hvað er venjuleg hegðun og hvað er afbrigðileg hegðun. Mikilvægt er að koma í veg fyrir áhrif af fjármálafíkn til að hægt sé að koma fíklinum til aðstoðar, fjölskyldu hans og samstarfsfólki og vernda hagsmuni almennings um leið. Viðurkenning og skilningur á vandamálinu gefur fíklunum möguleika á að vinna í sársaukanum og vanlíðaninni sem fer stigvaxandi og veldur að lokum miklum skaða ef ekkert er aðhafst, því hegðunin flokkast ekki undir lögbrot fyrr en allt er komið í þrot, skaðinn er orðinn alger og þjóðfélagið verður fyrir miklu tjóni.&lt;/p&gt;
 
-&lt;p&gt;More complete instructions are available at &lt;a href=&#34;https://www.hugfari.com/overview/installing/&#34;&gt;installing hugo&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Einstaklingar sem lenda í slíku áfalli þurfa tíma til að geta vegið og metið afleiðingar og farið að takast á við nýjar og breyttar aðstæður. Það má líkja þessu við erfitt beinbrot. Beinbrotið þarf langan tíma til að gróa því það eru hömlur á því hvað líkaminn er fær um og síðan þarf að takast á við endurhæfingu til þess að koma líkamanum í fyrra horf. Endurhæfingin reynist oft erfið. Áfalli fylgja hömlur á því hvað er hægt að gera og einkstalinga fýsir að fara að geta tekist á við nýjar aðstæður. Þá er eðlilegt að reyna að gera sér grein fyrir því æði sem fylgir fjármálafíkn, æði sem þarf að koma í veg fyrir að komi aftur.&lt;/p&gt;
 
-&lt;h2 id=&#34;step-2-build-the-docs&#34;&gt;Step 2. Build the Docs&lt;/h2&gt;
+&lt;p&gt;ÁRÁTTUHEGÐUN&lt;/p&gt;
 
-&lt;p&gt;Hugo has its own example site which happens to also be the documentation site
-you are reading right now.&lt;/p&gt;
+&lt;p&gt;Samræmd skilgreining á geðrænum kvillum er birt í handbók sem heitir The Diagnostic and Statistical Manual of Mental Disorders, stytt í DSM, þar sem lýst er einkennum röskunar ásamt mögulegum meðferðum. Síðasta útgáfa af DSM – IVR kom út árið 2000 (endurprentuð fram til 2007) og nú er reiknað með að fimmta útgáfa muni koma út árið 2012. Í fyrirhugaðri útgáfu er búist við að þar komi í fyrsta sinn skilgreining á „Áráttuhegðun“ (Behavioral Addiction) sem verði þá skilgreind sem: t.d. árátta í kynlíf, innkaupaæði eða tölvufíkn sem gefur í skyn að um fíkn sé um að ræða. Þessi hegðun gæti komist á það stig, að auðveldlega væri hægt að setja hana í samhengi við hegðun áfengis- eða vímuefnafíkla. Rökin fyrir þessu eru þau að fólk sem haldið er slíkri áráttuhegðun sýnir sömu einkenni og vímuefnafíklar, eins og til dæmis óstjórnanlega hegðun, óþol og fráhvarfseinkenni. Árátta, þráhyggja og þunglyndi geta verið líklegar orsakir fyrir áráttuhegðun (Simmons, C., 2009).&lt;/p&gt;
 
-&lt;p&gt;Follow the following steps:&lt;/p&gt;
+&lt;p&gt;Það sem hefur komið glögglega fram þegar afleiðingar bankahrunsins urðu sýnilegri er að það virðist vera hægt að flokka hegðun starfsmanna banka, fjármálafyrirtækja og annarra fjárfesta sem eitt afbrigði af áráttuhegðun. Nánar tiltekið sem fjármálafíkn þar sem hægt er að sjá glöggt samhengi við hegðun áfengis- og vímuefnafíkla. Enn frekar má sjá mjög líka hegðun og gjarnan kemur upp hjá spilafíklum en samt með nokkrum frávikum. Spilafíklar eru gjarnan einir með sitt vandamál en fjármálafíkn virðist oft verða að hóphegðun.&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;Clone the &lt;a href=&#34;http://github.com/spf13/hugo&#34;&gt;hugo repository&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;Go into the repo&lt;/li&gt;
-&lt;li&gt;Run hugo in server mode and build the docs&lt;/li&gt;
-&lt;li&gt;Open your browser to &lt;a href=&#34;http://localhost:1313&#34;&gt;http://localhost:1313&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;Nú væri það mikil þjóðremba að halda því fram að hér sé um séríslenskt fyrirbæri að ræða. Heldur má ætla að hér sé um almennt hegðunareinkenni að ræða sem geri ekki greinarmun á þjóðerni. Ég ætla að setja hér fram það sem ég tel að séu einkenni á fjármálafíkn og hvað mögulega hægt væri að gera til að aðstoða þá einstaklinga sem verða háðir slíkri áráttuhegðun sem og þá sem verða meðvirkir.&lt;/p&gt;
 
-&lt;p&gt;Corresponding pseudo commands:&lt;/p&gt;
+&lt;p&gt;EINKENNI FJÁRMÁLAFÍKNAR&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;git clone https://github.com/spf13/hugo
-cd hugo
-/path/to/where/you/installed/hugo server --source=./docs
-&amp;gt; 29 pages created
-&amp;gt; 0 tags index created
-&amp;gt; in 27 ms
-&amp;gt; Web Server is available at http://localhost:1313
-&amp;gt; Press ctrl+c to stop
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Helsta einkenni fjármálafíknar er eins og í öðrum fíknum það að skynjun á umhverfi fer að raskast og verður mjög sjálfviðmiðuð. Í stað þess að byggja upp heilbrigt samband við aðra fer fíkillinn smám saman að byggja upp samband þar sem samhengið verður sjúkt og markað af ytri áhrifum t.d. peningum. Fíkillinn tekst ekki á við eigin skynjun á tengslum sínu við aðra, mat hans á eigin líðan er óheilbrigð og hann missir sjónar á því hvað sé raunveruleg sátt. Fíkillinn sinnir ekki innri þörfum og fer að stjórnast af ytri viðmiðum eins og peningum eða virðingu annarra. Þar með fær hann aldrei þarfir sínar uppfylltar í raun og veru og upplifir þær einungis sem stöðuga pressu á sig. Pressu sem endalaust þarf að takast á við með því að bregðast við umhverfinu í stað þess að vinna í sjálfum sér.&lt;/p&gt;
 
-&lt;p&gt;Once you&amp;rsquo;ve gotten here, follow along the rest of this page on your local build.&lt;/p&gt;
+&lt;p&gt;Þegar allt hrynur að lokum lendir fíkillinn í miklu áfalli. Áfallið heltekur fíkilinn, nánasta samfélag hans, samstarfsaðila og alla þá sem verða fyrir barðinu á hegðun hans. Allir geta lent í umrótinu, þ.e. allir sem trúðu á og treystu viðkomandi en uppskáru ekki neitt nema sárindin. Sumir tapa miklu, ekki bara krónum heldur líka trausti á mannleg samskipti.&lt;/p&gt;
 
-&lt;h2 id=&#34;step-3-change-the-docs-site&#34;&gt;Step 3. Change the docs site&lt;/h2&gt;
+&lt;p&gt;Oft þarf utanaðkomandi aðila til að veita faglega aðstoð, því nánustu aðstandendur fíkilsins verða þvældir inn í aðstæður og lyganet hans, sumir hverjir eftir áralanga samvinnu við viðkomandi. Fíkillinn þarf að vinna heilmikið í sjálfum sér til þess að endurhæfing geti farið fram því hann þarf að endurskoða eigin afstöðu til umhverfisins og til sín sjálfs.&lt;/p&gt;
 
-&lt;p&gt;Stop the Hugo process by hitting ctrl+c.&lt;/p&gt;
+&lt;p&gt;Rannsóknir sem hafa verið gerðar í félagslegri sálfræði geta varpað ljósi á þá mannlegu bresti sem eru vísar að fjármálafíkn. Aðeins er hægt að tala um fjármálafíkn þegar mörg af þessum einkennum koma saman og mynda heilkenni. Skilningur á þessum einkennum, sem byggður er á skilgreiningum úr félagslegri sálfræði, gerir rannsóknir á fjármálafíkn mögulega og leggur vísindalegan grunn að meðferð og meðhöndlun á aðstæðum áður en allt fer á verri veg.&lt;/p&gt;
 
-&lt;p&gt;Now we are going to run hugo again, but this time with hugo in watch mode.&lt;/p&gt;
+&lt;p&gt;Hóphegðun er mikilvægt afl í fjármálafíkn, andstætt til dæmis veðmálafíkn. Algengt er að gjörðir fíkilsins hafi mikil áhrif á nánustu samstarfsmenn, sér í lagi vegna þess að líkur eru á að sérstök hjarðhegðun myndist þar sem klíkuskapur og hollusta eru tekin fram yfir sjálfstæða skoðun og gagnrýna hugsun.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;/path/to/hugo/from/step/1/hugo server --source=./docs --watch
-&amp;gt; 29 pages created
-&amp;gt; 0 tags index created
-&amp;gt; in 27 ms
-&amp;gt; Web Server is available at http://localhost:1313
-&amp;gt; Watching for changes in /Users/spf13/Code/hugo/docs/content
-&amp;gt; Press ctrl+c to stop
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Góður skilningur á eðli fjármálafíknar er grundvöllur þess að hægt sé að byggja upp að nýju og hlúa að endurmenntun og endurhæfingu á skipulagðan hátt. Hér á eftir eru rakin upp sálfræðileg atriði sem mikilvægt er að hafa í huga þegar fíkn tekur völdin.&lt;/p&gt;
 
-&lt;p&gt;Open your &lt;a href=&#34;http://vim.spf13.com&#34;&gt;favorite editor&lt;/a&gt; and change one of the source
-content pages. How about changing this very file to &lt;em&gt;fix the typo&lt;/em&gt;. How about changing this very file to &lt;em&gt;fix the typo&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;KVÍÐI OG UMHVERFISÁHRIF&lt;/p&gt;
 
-&lt;p&gt;Content files are found in &lt;code&gt;docs/content/&lt;/code&gt;. Unless otherwise specified, files
-are located at the same relative location as the url, in our case
-&lt;code&gt;docs/content/overview/quickstart.md&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Fyrst ber að nefna hvernig við skynjum og túlkum umhverfisáhrif. Eftir því sem utanaðkomandi áhrif og truflanir aukast verður álagið meira og um leið eykst einsýni viðkomandi og sjónarhornið þrengist. Einstaklingur sækist þá meira í hópinn og forðast allt sem ógnar honum eða er framandi. Það fara að koma fram ofurviðbrögð við áreitum eða áreitin eru hunsuð að fullu. Skilgreiningar verða óljósar og hugtök verða víð. Þröngar og nákvæmar skilgreiningar eru ekki lengur viðmið í vinnubrögðum. Þegar álagið verður of mikið má búast við því að það myndist mikið ósamræmi í ákvörðunartöku. Ákvarðanir verða tilviljanakenndar og byggjast á mótþróa og ótta um eitthvað óskilgreint  í stað heilbrigðrar skynsemi. Óábyrg afstaða brýst fram í einstaklingnum sem ýtir ákvarðanatöku yfir á aðra og ætlast til þess að hlutirnir leysist. Valkostir eru ekki skoðaðir og mat á aðstæðum er ekki raunhæft.&lt;/p&gt;
 
-&lt;p&gt;Change and save this file.. Notice what happened in your terminal.&lt;/p&gt;
+&lt;p&gt;SÉRTÆK ÁHRIF FRÁ UMHVERFINU ERU OFAUKIN&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;&amp;gt; Change detected, rebuilding site
+&lt;p&gt;Rannsóknir hafa sýnt að áhrif frá stjórnmálum á fjármálamarkaði eru ekki nærri því jafn mikil og oft er talið. Þessu er nefnilega öfugt farið og eru það fjármálamarkaðirnir sem hafa áhrif á sýn okkar á stjórnmálin. Ef fjármálamarkaðir eru í niðursveiflu kjósa menn frekar stjórnarandstöðuna heldur en ríkjandi valdhafa. Sértæku áhrifin sem oftast er horft á með vonaraugum eru því minni en ætlað er. Ríkistjórnir og aðrar stjórnunarstofnanir gera í raun aldrei neitt fyrir almenning, heldur skattleggja almenning og gera eitthvað fyrir suma. Almenningur bíður eftir aðgerðum ríkisstjórna sem svo aldrei koma, því yfirleitt er verið að draga að koma málum á hreint. Það gerir málin verri því almenningur fær ekki upplýsingar um stöðu mála en er ávallt að vænta fregna um breytta tíma og það verður erfiðara fyrir einstaklinga og fyrirtæki að gera áætlanir fyrir framtíðina. Það þarf alltaf að takast á við breytingar með kjarki og þekkingu en ekki með brengluðu sjálfsmati og væntingum um að hjálpin komi að ofan.&lt;/p&gt;
 
-&amp;gt; 29 pages created
-&amp;gt; 0 tags index created
-&amp;gt; in 26 ms
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;EÐLILEG ÚRVINNSLA&lt;/p&gt;
 
-&lt;p&gt;Refresh the browser and observe that the typo is now fixed.&lt;/p&gt;
+&lt;p&gt;Vanlíðan gerir einstaklingnum erfiðara fyrir að takast á við nauðsynlegar ákvarðanir og stöðvar þannig ákvörðunarferlið og setur spennu í aðstæður. Ef einstaklingar fá ekki leiðbeiningar til þess að takast á við málin munu erfiðleikarnir hrannast upp á fleiri en einu sviði.&lt;/p&gt;
 
-&lt;p&gt;Notice how quick that was. Try to refresh the site before it&amp;rsquo;s finished building.. I double dare you.
-Having nearly instant feedback enables you to have your creativity flow without waiting for long builds.&lt;/p&gt;
+&lt;p&gt;Þegar einstaklingar finna fyrir fælni við að takast á vandanum og fara að slá málum á frest má búast við því að vandamálin verði fleiri og stærri. Þá fara fleiri einkenni að koma í ljós. Einstaklingar sem hafa þróað með sér fjármálafíkn eru afar fælnir, kvíðahegðun er mjög sýnileg og afgerandi í allri hegðun, líkt og búast má við í allri annarri fíkn.&lt;/p&gt;
 
-&lt;h2 id=&#34;step-4-have-fun&#34;&gt;Step 4. Have fun&lt;/h2&gt;
+&lt;p&gt;SÍENDURTEKIN VIÐBRÖGÐ OG ÚRLAUSNIR SKAPA LÆST HEGÐUNARMYNSTUR&lt;/p&gt;
 
-&lt;p&gt;The best way to learn something is to play with it.&lt;/p&gt;
+&lt;p&gt;Það er auðveldara að endurtaka ósjálfráða viðbrögð heldur en að reyna eitthvað nýtt. Hegðunarmynstur okkar skilyrðist í æsku þegar síendurtekin áreiti venja okkur á ákveðna hegðun sem verður að lokum ósjálfráða. Sumir hafa vanið sig á neikvætt hegðunarmynstur með því að takast ekki á við eigin líðan og nánd í aðstæðum.&lt;/p&gt;
+
+&lt;p&gt;Þegar hegðunarmynstur einkennist af viðbrögðum og úrlausnum sem auka á vandamálin í stað þess að leysa þau eru miklar líkur á að viðkomandi treysti á áróður og væntingar í stað þess að horfast í augu við stöðuna eins og hún er.&lt;/p&gt;
+
+&lt;p&gt;Sálfræðilegar rannsóknir hafa sýnt fram á að órökræn hegðun er mjög algeng hjá fólki. Þegar fíknarmynstur fer að koma fram hjá einstaklingi verður þessi óhjálplega og órökræna hegðun sífellt algengari og ýktari. Hér fyrir neðan eru þessi óhjálplegu einkenni rakin.&lt;/p&gt;
+
+&lt;p&gt;ÁRÓÐUR OG EINHÆFAR UPPLÝSINGAR&lt;/p&gt;
+
+&lt;p&gt;Hugarburður verður ekki að sannleik, hversu oft sem hann er endurtekinn. Það er ekki endilega allt rétt sem fer manna á milli. Fréttamenn hafa oft upplýsingar eftir án þess að staðfesta upprunann. Þegar eitthvað hefur verið endurtekið nægilega oft hefur almenningur tilhneigingu til að telja að fullyrðingar séu sannar. Yfirleitt skekkjast upplýsingar vegna hagsmuna. Sá sem kemur upplýsingunum á framfæri hefur einhverra hagsmuna að gæta og sá sem móttekur upplýsingarnar vegur þær og metur eftir eigin hagsmunum. Eftir því sem fíkn ágerist verður túlkun upplýsinga alltaf meira og meira einstaklingsbundin og sjálfviðmiðuð.&lt;/p&gt;
+
+&lt;p&gt;HJÁTRÚ&lt;/p&gt;
+
+&lt;p&gt;Það er ríkt í mannlegu eðli að vilja að umhverfi sitt sé öruggt og að hægt sé að ganga að umhverfinu vísu. Hjátrú er tilraun mannskepnunnar til þess að hafa stjórn á umhverfinu og óræðum atvikum í lífi sínu. Einstaklingar reyna að gefa atburðum merkingu og búa til auka orsakatengingar sem eru ekki raunverulegar. Íþróttamenn eru til dæmis þekktir fyrir að keppa í ákveðnum happaflíkum, þ.e. flíkum sem þeir voru í síðast þegar þeir sigruðu, því þeir telja þær færa sér auknar líkur á sigri, eða undirbúa sig alltaf á sama hátt og þeir gerðu eitthvert skiptið sem mjög vel gekk í keppnisleik. Sömuleiðis er algengt að nemendur taki happahlut með sér í próf í von um að þeim gangi þá betur í prófinu.&lt;/p&gt;
+
+&lt;p&gt;GÓÐ FRAMMISTAÐA EYKUR TRÚ VIÐKOMANDI Á ÞVÍ AÐ GETA GERT SNILLDARVERKIÐ AFTUR&lt;/p&gt;
+
+&lt;p&gt;Í íþróttum er gjarnan talið að góð frammistaða sé auðveldlega endurtekin og að ef einhver hefur skorað mark eða körfu séu meiri líkur á því að honum gangi jafn vel og í fyrsta skiptið svo lengi sem hann reyni bara aftur og aftur. Þetta er þekkt hugvilla. Hver sókn verður að fara fram á sínum eigin forsendum.&lt;/p&gt;
+
+&lt;p&gt;Fjármálahillingar gera vart við sig þegar einstaklingar telja að þeir eigi sitt undir í viðkvæmum markaði. Við þær aðstæður hafa einstaklingar meiri tilhneigingu til þess að falsa fjárhagslega afkomu sína og aðstæður. Þeir fara að einblína á það jákvæða í sinni stöðu og horfa fram hjá varúðarmerkjum. Slíkur skortur á yfirsýn veldur miklum kvíða og mikilli streitu og athyglisbrestur fylgir í kjölfarið. Í tilraun til að ná stjórn á umhverfi sínu fara einstaklingar að búa sér til sjálfupphafna stjórn á aðstæðum með því að stjórnast af skynvillum og óskhyggju. Fjárfestingahegðun sem er orðin að mynstri af hillingum og óskhyggju leiðir af sér slæm viðskipti. Vafalaust væri hægt að tína til mörg dæmi um slíkar hillingar og óskhyggju hjá aðilum á fjármálamarkaðnum síðastliðin ár. Slíkar hillingar eru mjög líklega enn til staðar innan bankanna og ekki síður hjá viðskiptavinum þeirra. Það þarf reynslu og þekkingu til að bera kennsl á hegðunina sem leiðir af sér slíkar hillingar og til að hjálpa einstaklingum að takast á við óheilbrigð hegðunarmynstur.&lt;/p&gt;
+
+&lt;p&gt;Fölsun á afkomu er ein gerð af fjármálahillingum. Í bankakerfinu voru búnir til öfugir píramídar þar sem starfsmenn og viðskiptavinir fengu lánað fé til þess að kaupa hlutafé. Þannig var verði hlutafjár haldið uppi um leið og hillingar voru búnar til innan fjármálakerfisins. Þessir píramídar reyndust síðan haldlaust hlutafé.&lt;/p&gt;
+
+&lt;p&gt;AÐ SÝNA MERKI UM ERFIÐLEIKA FRAMUNDAN Í REKSTRINUM EN EKKI FARA Í FELULEIK&lt;/p&gt;
+
+&lt;p&gt;Ábyrgðarfælni leysir ekki málin. Erfiðum ákvörðunum getur fylgt mikil vanlíðan en það er nauðsynlegt að takast á við aðstæður, þótt erfitt geti reynst að finna bestu mögulegu lausnina við spennuþrungnar aðstæður.&lt;/p&gt;
+
+&lt;p&gt;Sjálfupphafnir spádómar (Self-fulfilling prophecies) er þegar einstaklingur trúir því að mál muni fara á þennan eða hinn veginn og vinnur síðan, meðvitað eða ómeðvitað, að því að þessi spádómur rætist. Algeng birtingarmynd slíkra spádóma er þegar fólk réttlætir slaka framkomu fyrirfram, t.d. nemandi sem spáir sér slöku gengi í prófi en er um leið að réttlæta það að hann muni ekki undirbúa sig nægilega vel fyrir prófið. (Hogg og Vaughan, 2002).&lt;/p&gt;
+
+&lt;p&gt;Fordómar og hleypidómar aukast gjarnan hjá fíklum því það tilheyrir þeirri sjálfhverfri afstöðu sem byggist smám saman upp hjá fíklinum.&lt;/p&gt;
+
+&lt;p&gt;Áfengis- og vímuefnanotkun ásamt öðrum birtingarmyndum fíknhegðunar eru líklegri en ella til að aukast hjá einstaklingum sem eru haldnir fjármálafíkn. Öll fíkn gengur út á flótta frá veruleikanum og þess vegna má búast við mikilli ásókn viðkomandi í áfengi og önnur vímuefni eða jafnvel kynlífsþjónustu. Veðmála- og spilafíkn getur líka verið innbyggð í starf viðkomandi eða hann sótt í slíka þjónustu með ákafa. Eftir því sem fjármálafíknin ágerist má búast við því að ásókn í aðra fíkn verði meira áberandi.&lt;/p&gt;
+
+&lt;p&gt;Öll ofantalin atriði eru líklegri til þess að ýkjast og verða óhjálplegri eftir því sem fjármálafíknin tekur yfir og hegðun einstaklingsins markast sífellt meira af þessarri óstjórnanlegri hegðun. Í stað þess að takast á við eigin líðan og nánd við sjálfan sig fer hegðun fíkilsins að snúast um að reyna að stjórna umhverfinu og áreitunum sem dynja á. Öll sú hegðun er mjög ómarkviss og hefur afar neikvæð áhrif á fjölskyldumeðlimi, vini og samstarfsfólk viðkomandi. Þessar óhjálplegu aðferðir eru teknar fyrir hér að neðan.&lt;/p&gt;
+
+&lt;p&gt;STJÓRN Á UTANAÐKOMANDI ÁHRIFUM&lt;/p&gt;
+
+&lt;p&gt;Hegðun fíkilsins fer að snúast meira og meira um að stjórna umhverfi sínu til þess að það falli að sjálfhverfa sjónarhorni hans. Öllum brögðum er beitt. Fíkillinn getur til dæmis tekið upp á því að tala við þá aðila sem gætu haft áhrif á hans nánustu, bara til þess að hræra í þeim. Sektarkennd er miskunnarlaust beitt og höfðað til samvisku þeirra sem hafa samskipti við fíkilinn. Fíkillinn beitir einangrun og höfðar til höfnunarótta og kvíða samferðafólksins. Þegar þessar stjórnunaraðferðir ganga ekki upp er farið að beita hótunum eða árásarhneigðinni jafnvel leyft að leika lausum hala með barsmíðum og/eða meiðingum.&lt;/p&gt;
+
+&lt;p&gt;HÓPHUGSUN&lt;/p&gt;
+
+&lt;p&gt;Á meðal þeirra félagslegu fyrirbæra sem hafa verið rannsökuð í sálfræðinni er þegar hópurinn fer að fylgja þröngum hagsmunum vegna þess að þau eru félagslega samþykkt og ýtir frá sér öllu öðru sem er ekki í samræmi við ríkjandi hugsun innan hópsins. Eitt frægasta dæmið um þetta er þegar ríkisstjórn Kennedy bandaríkjaforseta réðst inn á Svínaflóa. Þar var öllu ýtt til hliðar sem ekki var í samræmi við ríkjandi skoðanir hópsins. Þegar slík hóphugsun tekur völdin er auðvelt fyrir fíknhegðun að þróast. Það er ekki ólíklegt að slík hóphugsun hafi tekið völdin í fjármálafyrirtækjunum og andstæðum sjónarmiðum, þ.e.a.s. viðvörunarmerkjum, hafi verið ýtt út af borðinu. Ef það er tilfellið þá hefur hóphugsunin flýtt mjög fyrir og ýkt áhrifamátt gervihagkerfisins og átt þátt í því að hillingarnar voru farnar að hafa of mikil áhrif innan bankakerfisins.&lt;/p&gt;
+
+&lt;p&gt;Klíkuskapur er fylgifiskur hóphugsunarinnar og beinist að því að aðstoða meðlimi hópsins en firra sig ábyrgð gagnvart öllum sem standa utan hópsins. Klíkuskapurinn verður einráður og tryggð við hópinn er æðri öllu öðru. Fíklar sækja mikið í klíkuskap þar sem fíknin er afsökuð, hópurinn er jafnvel meðvirkur hegðun fíkilsins eða hópurinn allur orðinn mergsoginn af fíkn meðlima hópsins. Hóphugsun og klíkuskapur verða áberandi í fíknhegðuninni.&lt;/p&gt;
+
+&lt;p&gt;SÁ SEM BENDIR Á AÐRA MEÐ VÍSIFINGRI BENDIR MEÐ ÞREMUR FINGRUM Á SIG SJÁLFAN&lt;/p&gt;
+
+&lt;p&gt;Við sjáum endurtekið í fjölmiðlum verið að krefjast afsagnar hinna og þessa. Uppi eru ásakanir á aðra í stað þess að leitað sé eftir skilningi á aðstæðum. Það er eitt einkenni fíknhegðunar að fíkillinn bendi á aðra og telji þá vera verri en hann sjálfur en sjá ekki einkenni sinnar eigin hegðunar.&lt;/p&gt;
+
+&lt;p&gt;HJÁLPLEYSI EÐA SAMKENND&lt;/p&gt;
+
+&lt;p&gt;Í stað þess að sýna samkennd og almenna hjálpsemi fer einstaklingurinn að fela sig á bak við hóp. Samtryggingin miðast við takmarkaðan hóp manna og kvenna, en aðrir þar fyrir utan eru ekki með í að deila gæðum. Aftur á móti mega þeir sem eru fyrir utan hópinn bera ábyrgð á gerðum þessa hóps. Það mátti sjá þegar fólk flykktist í hópa til að berja utan í Alþingi og lemja á lögregluþjónum. Þetta mátti líka sjá þegar bankamenn fóru í hópum að búa til svikamyllur í fjárhagskerfinu.&lt;/p&gt;
+
+&lt;p&gt;ÓÁBYRG HEGÐUN, ÁBYRGÐARFÆLNI OG AFNEITUN&lt;/p&gt;
+
+&lt;p&gt;Illa þykir fara og óviturlega hjá þeim sem ekki vita sinn hag og verða að sjá allt með augum annarra. Mestur er þó ódugnaðurinn þegar yfirmenn koma hvergi nærri og láta aðra einráða, þegar mest ríður á. Er þá annað hvort að láta aðra bera ábyrgðina ef illa fer eða að vera svo værukærir að láta aðra binda sér birði sem menn síst vilja bera (Bjarni frá Vogi, 1908).&lt;/p&gt;
+
+&lt;p&gt;Þetta er hegðun sem er líklegri til að koma upp ef einstaklingar eru að höndla með eigur annarra. Þetta kemur einnig oftar upp þar sem fíknin er farin að hafa áhrif á hegðun einstaklingsins. Þær stundir sem mest ríður á kalla oftast á mikla nánd og krefjast þess að einstaklingurinn hafi góðan skilning á sér sjálfum í umhverfi sínu, en sé ekki fastur í sjálfhverfri og eigingjarnri hugsun. Stjórnendur og stjórnmálamenn fela sig til dæmis á bak við skoðanakannanir en treysta síður á eigin skilning á aðstæðum. Þegar einstaklingurinn er ekki að takast á við veröldina eins og hún er og veruleikafirringin er farinn að grassera fara áhrif af óhjálplegri afneitun að koma fram. Það er eðlilegt að upplifa afneitun, annars værum við öll að samþykkja allt, alltaf, án þess að taka til þess heilbrigða afstöðu. Þegar afneitun er hins vegar orðin óhjálpleg og skaðleg fyrir einstaklinginn og samferðafólk hans er um að ræða fíknmynstur.&lt;/p&gt;
+
+&lt;p&gt;MÓTÞRÓI Í STAÐ SKÖPUNARGLEÐI&lt;/p&gt;
+
+&lt;p&gt;Eðlilegur mótþrói snýst um að taka á þeim atriðum sem valda áhrifum á eigin líðan hvort sem það eru umhverfisáhrif eða innri líðan. Það er eðlilegt að úrvinnsla falli í mynstur sem er mótað af fyrri reynslu og aðstæðum. Breytingar kalla þó stundum á nýjar aðferðir og nýjar úrvinnsluleiðir. Þegar endalaust er tekið á málum á sama hátt án þess að taka tillit til þeirra breytinga sem hafa orðið myndast sífellt meiri mótþrói í úrvinnsluferlinu hjá einstaklingnum. Mótþrói getur birst á margan máta, eins og til dæmis í ofurlaunum, því þau hafa ekkert við eðlilega úrvinnslu mála að gera.&lt;/p&gt;
+
+&lt;p&gt;OFURLAUN BÆTA ENGU VIÐ FRAMMISTÖÐU EN BÆTA Á VANDA SKULDUGRA&lt;/p&gt;
+
+&lt;p&gt;Sálfræðirannsóknir hafa sýnt fram á að ytri hvatar bæta engu við sköpunargleðina. Það þarf ekki að borga fólki margföld ráðherralaun, hvort sem það er í ríkisbönkum, ríkisstofnunum eða fyrirtækjum sem eru undir ríkisbankana komin (slík fyrirtæki eru í raun orðin hálfopinber rekstur þar til gert hefur verið hreint á þeim bænum). Fíkillinn sem telur sig þurfa margföld ráðherralaun leggur allt undir til að verja sína stöðu en skipuleggur og stjórnar alls ekki með það fyrir augum að gera hlutina hagkvæma eða eðlilega. Sennilega er ekki neitt sýnilegra í fjármálafíkninni en þessi ákafa peningaþörf og ásókn í ofurlaun.&lt;/p&gt;
+
+&lt;p&gt;SKULDBINDINGAR OG MEIRI SKULDBINDINGAR&lt;/p&gt;
+
+&lt;p&gt;Veðmálafíkn ræður öllu. Menn treysta á samkomulag, en eru á svikastólum við hvorn annan. Það er gaman að kaupa sér bíl á kaupaláni. Í það minnsta fyrstu dagana, eða þar til gíróseðlarnir fara að berast og bíllinn eldist. Skuldbindingarnar eru eins á timburmenn. Áfengisvíman rennur af fólki og í stað þess að takast á við morgundaginn á eðlilegan hátt er drykkjunni einfaldlega haldið áfram til að forðast timburmennina. Að taka lán í stað þess að gera hagkvæm viðskipti er eitt mjög sýnilegt einkenni af óeðlilegri skuldbindingahegðun. Þá eru einstaklingar farnir að versla þar sem vörur fást á lánum þrátt fyrir að verð sé óhagstætt, aðeins til þess að komast yfir vörurnar, en hirða ekki um framhaldið.&lt;/p&gt;
+
+&lt;p&gt;GERVIPENINGAR&lt;/p&gt;
+
+&lt;p&gt;Nýlegar sálfræðirannsóknir benda til þess að einstaklingurinn hafi frekar tilhneigingu til að svindla þegar hann höndlar gervipeninga, eins og matadorpeninga, heldur en þegar hann höndlar raunverulega seðla. Margir ættu einmitt að kannast við að versla minna þegar borgað er með pening heldur en krítarkorti. Fjármálamarkaðurinn byggir á huglægum hugtökum á borð við kaup og sala á fjármálavafningum, mögulegt greiðslufall og afleiðuviðskipti. Með öðrum orðum, þá er fjármálamarkaðurinn afar fjarri raunverulegum peningaseðlum og fólk hefur þar af leiðandi frekar tilhneigingu til að reyna að svindla á kerfinu innan fjármálamarkaðarins. Fíknin í óraunveruleika fjármálaheimsins verður alltaf meiri og óstjórnlegri. Bankar eru taldir þurfa að eiga helst 14% eigið fé á móti lánsfé, fjárfestingabankar aðeins 3% og vogunarsjóðir ekki nema 1 krónu af hverjum hundraðkalli sem þeir fjárfesta. Annað er fengið að láni. Þeir eiga varla fyrir sínum eigin launum út mánuðinn.  Þetta hlutfall var síðan þynnt út með óteljandi ráðum. Það er ljóst að eftir því sem starfsemi bankanna snérist sífellt meira um vogunarviðskipti og aðra slíka fjármálagerninga myndaðist skammtímahagnaður. Um leið skapaðist of mikil áhætta á bankakerfið. Starfsmenn og eigendur virðast hafa myndað of marga fjármálagerninga sem voru áhættuviðmiðaðir en ekki þjónustuviðmiðaðir. Þannig tók fíknin smám saman völdin á fjármálakerfinu.&lt;/p&gt;
+
+&lt;p&gt;MÚTUR, VINAGREIÐI EÐA RÁÐNING SKYLDMENNA&lt;/p&gt;
+
+&lt;p&gt;Til þess að tryggja sig og skuldbinda aðra eru notaðar misjafnar leiðir. Sumir nota mútur, vinagreiða, hollustu í gegnum félagsskap eða ráðningu þeirra skyldmenna sem gott er að eiga að ef þess þarf á að halda. Skuldbindingin verður alltaf meira og meira áberandi í fjármálafíknhegðun.&lt;/p&gt;
+
+&lt;p&gt;ÓRÓI OG ÓSÁTT RÆÐUR EN EKKI SÁTT&lt;/p&gt;
+
+&lt;p&gt;Að lokum verður ósáttin og óróin það afgerandi að það fara að koma fram sjúkleg einkenni eins og hugvilluröskun, sem er skilgreindur sjúkdómur skv. alþjóðlegum stöðlum (DSM-IVR-TR).&lt;/p&gt;
+
+&lt;p&gt;Fíkillinn hefur smám saman fests í klóm græðginnar. Það er ekki neitt sem getur fullnægt óskum hans um að fá eitthvað nýtt eða betra. Það er aldrei ró í neinum beinum, nema rétt á meðan nýjasta æðið er að ganga yfir. Áhættan sem tekin er verður alltaf meiri og stærri og áhættusamari.&lt;/p&gt;
+
+&lt;p&gt;HUGVILLURÖSKUN&lt;/p&gt;
+
+&lt;p&gt;Þegar aðstæður hafa fengið að þróast með þeim hætti að áhættan er sífellt meiri og kvíðinn og tilfinningahitinn í stöðugri spennu er mögulegt að einstaklingar myndi með sér hálfgerða hugvilluröskun. Þá getur komið fram aðsóknaræði. Það fara að koma fram órökréttar en tengdar hugvillur og ásakandi hugsanir. Sumir verða stórir í hugsun og grand en aðrir mjög virkir fyrir mögulegum ógnunum. Tortryggni fer að gera vart við sig og fólk fer að gera árásir á aðra, því þessum einstaklingum finnst þeir vera mishöndlaðir og vera sviknir.  Menn fara að koma fram með einhver plön sem hafa enga stoð í raunveruleikanum. Það koma fram risaáætlanir um iðnaðartækifæri og allskonar fjárfestingartækifæri sem eiga það sameiginlegt að vera stóra planið. Svona stór plön fylgja gjarnan fjármálafíkn og eru oft uppspiluð með stuðningi frá stjórnmálaöflum og öðrum félagslegum hagsmuna- og þrýstihópum. Það er einkennandi fyrir fjármálafíkn að hún verður fljótt hóphegðun eða hjarðhegðun. Margir verða þvældir inn í áhættuna, því yfirleitt fer þetta að snúast um að taka áhættu með annarra manna fé. Áhættunni er síðan velt yfir á aðra, eins og t.d. þegar banki lánar einstaklingshlutafélagi til þess að kaupa hlutafé í sjálfum bankanum. Leikurinn gekk út á það að sannfæra fólk um að hægt væri að taka þátt í lottó þar sem aðeins væru vinningar.&lt;/p&gt;
+
+&lt;p&gt;FJÁRMÁLAFÍKN – HVAÐ ER HÆGT AÐ GERA?&lt;/p&gt;
+
+&lt;p&gt;Það er ákaflega erfitt að ná til fíkils sem haldinn er fjármálafíkn. Hingað til hefur skilningur á málinu verið lagalegur. Það er, að einungis er tekið á málinu þegar viðkomandi einstaklingur hefur gengið svo langt yfir strikið að hann er farinn að brjóta lög ítrekað. Það er til dæmis ekki hægt að dæma spila- eða veðmálafíkil þótt hann sé að spila frá sér allar eigur. Það er ekki fyrr en viðkomandi er kominn í skuldir sem ekki er hægt að borga að eitthvað er gert.&lt;/p&gt;
+
+&lt;p&gt;Mikilvægast er fyrir alla að sjá að hér er um að ræða mynstur í hegðun, mörg einkenni sem smám saman verða ýktari og hegðunin flokkast að lokum undir heilkenni þar sem mjög mörg einkenni fara saman í mjög miklum mæli.&lt;/p&gt;
+
+&lt;p&gt;Þegar ljóst er að rannsökuð sálfélagsleg einkenni skapa tengd  hegðunarmynstur er loksins hægt að tala um fíkn sem heilkenni.  Viðurkenning á því að um er að ræða fíkn gefu möguleika á því að unnið sé kerfisbundið að því að þróa félagsleg viðbrögð og aðstoð við einstaklinga. Mikilvægt er að gera sér grein fyrir því að einkennin geta verið mismunandi og stig fíknarinnar mislangt gengin. Í öllum tilfellum þarf að gera sér grein fyrir því að það hafa skapast tengsl fíknar og meðvirkni (Schaef, 1997).&lt;/p&gt;
+
+&lt;p&gt;Þar sem fjármálafíkn byggir á hóphegðun þarf að taka hópinn fyrir og skoða hlutverk hvers og eins. Það er ekki nóg að meðhöndla einn eða tvo og ekki hina, því þá byggist bara upp nýtt samband fíknar og meðvirkni innan hópsins með nokkrum nýjum meðlimum. Við verðum að aðskilja hópinn og fræða einstaklinga um hvers eðlis samskiptin voru innbyrðis.&lt;/p&gt;
+
+&lt;p&gt;Öll einkennin bera með sér að nánd fíkilsins við hann sjálfan er í rúst. Viðhorf hans miðast við hópinn en ekki eigin líðan.&lt;/p&gt;
+
+&lt;p&gt;Fjármálafíkn er mjög hættulegt fyrirbæri fyrir þjóðfélagið. Framvinda sjúkdómsins tekur öll völd og einstaklingarnir láta sér afleiðingarnar fyrir aðra í léttu rúmi liggja.&lt;/p&gt;
+
+&lt;p&gt;Fjármálafíkn er samtvinnuð menningunni og nýtur stuðnings samfélagsins að stórum hluta. Jákvæð útkoma til skamms tíma er lofsungin og álitin vera velgengni og klókindi í viðskiptum og fíkillinn sækir í lof fyrir hegðun sem er oft hreinlega óábyrg áráttuhegðun. Mikilvægt er að samfélagið viðurkenni fjármálafíkn sem áráttuhegðun og fræðist um einkenni hennar því þá fyrst er hægt að vonast til að umfjöllun um einstaklinginn og eðli fjármálamarkaðarins verði faglegri.&lt;/p&gt;
+
+&lt;p&gt;Einstaklingar sem fara að sýna einkenni fjármálafíknar þurfa stöðugan stuðning til þess að halda sér að eðlilegri hegðun og falla ekki niður í dýpra stig fíknarinnar. Einkenni fíknar geta alltaf komið upp og það þarf ávallt að vera viðbúinn því að takast á við einkennin við minnsta tilefni. Bati er langvinnt ferli og fíkillinn þarf stöðugt að endurmeta sína stöðu í hverju máli, með tilliti til fíknarinnar.&lt;/p&gt;
+
+&lt;p&gt;Bati getur sýnst vera erfiður í fyrstu en allar líkur eru á því að fíklinum fari að líða betur þegar batamerkin fara að koma í ljós og að honum takist þá loks að ná betri tökum á sínu eigin lífi.&lt;/p&gt;
+
+&lt;p&gt;AÐRIR ÞURFA EKKI AÐ SPILA MEÐ&lt;/p&gt;
+
+&lt;p&gt;Fjölskyldur, samstarfsmenn, vinir eða aðrir sem hafa tengsl við viðkomandi þurfa að átta sig á takmörkunum í samskiptum. Það þarf að spyrja sig rækilega áður en skrifað er upp á lánveitingar, leyfi gefið til þess að nota nafn við áhættusamar aðgerðir eða tekið þátt í vafasömum og áhættusömum aðgerðum.&lt;/p&gt;
+
+&lt;p&gt;Makar þurfa að hafa allt sitt á hreinu í sambúð ef einkenni fjármálafíknar fara að gera vart við sig. Það er mjög áríðandi fyrir nánust skyldmenni að átta sig á í hvert stefnir. Ákvörðun þeirra getur verið einna áhrifamest í því að koma í veg fyrir því að allt fari á versta veg sem og stuðningur þeirra í bataferlinu.&lt;/p&gt;
+
+&lt;p&gt;Frjálst val einstaklings sem tekur mið af eigin líðan verður oft leiðbeinandi um það sem verða vill.&lt;/p&gt;
+
+&lt;p&gt;Samstarfsmenn þurfa líka að átta sig á því þegar einstaklingur er farinn að sýna einkenni fjármálafíknar. Það getur verið erfitt ef fíkillinn er t.d. yfirmaður og viðkomandi þarf að læra að lifa með fíknhegðun yfirmannsins án þess að taka ábyrgð á hegðun hans og verða meðvirkur í hegðunarmynstrinu sem gjarnan vill myndast í kringum fíkilinn.&lt;/p&gt;
+
+&lt;p&gt;FÁ FAGMENN TIL AÐ AÐSTOÐA VIÐ BATAFERLIÐ&lt;/p&gt;
+
+&lt;p&gt;Það getur flýtt fyrir bataferlinu að leita sér faglegrar aðstoðar. Fagmenn geta aðstoðað þá sem eru meðvirkir og ekki síður fíklana sjálfa að takast á við sínar aðstæður.&lt;/p&gt;
+
+&lt;p&gt;AÐ TAKAST Á VIÐ LÍFIÐ Á EIGIN TILFINNINGALEGUM FORSENDUM&lt;/p&gt;
+
+&lt;p&gt;Það sem fíkillinn þarf að vera mest meðvitaður um er að takast á við lífið á eigin forsendum. Hann skuldar engum og er ekki ábyrgur fyrir neinum nema sjálfum sér í tilfinningalegu tilliti. Allar ákvarðanir þurfa að standast einn dómara, þ.e. eigið tilfinningalíf.  Þess vegna má hann ekki blanda saman félagslegum forsendum og eigin tilfinningalegum forsendum. Frumskilyrði fyrir því að virkja bataferlið er að skilgreina og skilja hvað sé eigin sátt og hvað ekki.&lt;/p&gt;
+
+&lt;p&gt;REGLUVERK OG EFTIRLITSAÐILAR&lt;/p&gt;
+
+&lt;p&gt;Allt regluverk þarf að átta sig á fjölbreytni fjármálfíknar og víðtæk áhrif hennar. Eftirlitsaðilar verða að gera allt til þess að skipuleggja eftirlit á fjármálastofnunum með þessa fíkn í hug. Ráðamenn þurfa líka að átta sig á því hvernig þessi hegðun vindur smám saman upp á sig og þeir þurfa að skipuleggja alla fjármálastarfsemi með þessa fíkn í huga.&lt;/p&gt;
+
+&lt;p&gt;Vonandi tekst að skýra mörk betur og koma upp betra fjármálakerfi sem tekur á þessarri tilhneigingu fólks að lítilsvirða fjármuni og spila upp fjármálafíknina, en byggir ekki fíknina inn í fjármálakerfið eins og venjan hefur verið.&lt;/p&gt;
+
+&lt;p&gt;GRUNDVÖLLUR FYRIR FJÁRMÁLAFÍKN ER ALLS STAÐAR&lt;/p&gt;
+
+&lt;p&gt;Það er ljóst að fjármálastofnanir voru mjög markaðar af fjármálafíkn, en fjármálafíkn leynist víðar og er ekki einskorðuð við fjármálamarkaðinn þótt hún sé sýnilegust þar. Því þarf allt eftirlit með opinberum stofnunum og fyrirtækjum að hafa einkenni fjármálafiknar til hliðsjónar í starfi.&lt;/p&gt;
+
+&lt;p&gt;Það þarf að gera greinarmun á fjármálafíkn og áhrifum af eðlilegu ati í dagsins önn í erfiðu starfi. Munurinn liggur í því hversu óhjálpleg hegðun er farin að verða og hve háður einstaklingurinn er orðinn þeim einkennum sem lýst er hér að framan.&lt;/p&gt;
+
+&lt;p&gt;Eldri karlmenn og konur sýna meiri ábyrgð og minni áhættusækni og því mætti skoða þessa valkosti við stjórnun og eftirlit á rekstri, og þá sérstaklega hjá fjármálastofnunum. Gott er að hafa að leiðarljósi við uppbyggingu vinnustaða að hafa mátulega blöndu af reynslu og kynjaskiptingu.&lt;/p&gt;
+
+&lt;p&gt;FÍKILLINN ÞARF AÐ TAKA SPORAVINNU&lt;/p&gt;
+
+&lt;p&gt;Viðurkenna vandann og horfast í augu við stöðuna eins og hún er. Leitast eftir því að skilja sína eigin hagsmuni og forsendur.&lt;/p&gt;
+
+&lt;p&gt;Takast á við skilningsleysið og setja fram sinn eigin (n) vilja.&lt;/p&gt;
+
+&lt;p&gt;Gefa eftir stjórn á umhverfinu, en takast á við eigið líðan. Skilgreina sínar eigin forsendur.&lt;/p&gt;
+
+&lt;p&gt;Skoða alla möguleika sem bjóðast en falla ekki í hjálparleysi og doða. Skilja eðli æðruleysis.&lt;/p&gt;
+
+&lt;p&gt;Velja ábyrgt og standa við sitt val.&lt;/p&gt;
+
+&lt;p&gt;Vinna markvisst (í litlum skrefum) að því að láta sitt eigið val verða að veruleika.&lt;/p&gt;
+
+&lt;p&gt;Æfa sig í því að vinna í sínum eigin málum og láta þau hafa forgang í vinnu yfir daginn.&lt;/p&gt;
+
+&lt;p&gt;Skilja hvar eigin sátt liggur í hverju máli og koma sér í andlega ró með skilvirkri vinnu.&lt;/p&gt;
+
+&lt;p&gt;Heimildir&lt;/p&gt;
+
+&lt;p&gt;Bjarni Jónsson frá Vogi (1908). Ekki veldur sá er varar. Reykjavík, Ísafoldarprentsmiðja.&lt;/p&gt;
+
+&lt;p&gt;DSM – IVR-TR. 2007 [2000]. Arlington, VA: American Psychiatric Association.&lt;/p&gt;
+
+&lt;p&gt;Hogg, M. A. and Vaughan, G. M. (2002). Social Psychology (3rd ed.). Harlow, England: Pearsons Education Limited.&lt;/p&gt;
+
+&lt;p&gt;Schaef, Anne Wilson. (1997). Ástarfíkn, flótti frá nánd. (Escape form Intimacy) Þýðing, Helga Ágústsdóttir. Brekkubær Hellnum, Leiðarljós ehf.&lt;/p&gt;
+
+&lt;p&gt;Simmons, Clayton. (2009). Manual Manipulation Psychology Today, May/June, 2009.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Svefnvandamál</title>
-      <link>https://www.hugfari.com/blog/2009/09/17/svefnvandamal/</link>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2009/09/17/svefnvandamal/</link>
       <pubDate>Thu, 17 Sep 2009 13:47:08 +0200</pubDate>
       
-      <guid>https://www.hugfari.com/blog/2009/09/17/svefnvandamal/</guid>
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2009/09/17/svefnvandamal/</guid>
       <description>
 
 &lt;p&gt;Rannsóknir sýna að röskun á svefni eykur álag á líkamanum á svipaðan máta og kvíði eða streita (Irwin, Wang, Ribeiro og fleiri, 2009). Því þarf að taka svefnröskun alvarlega og þjálfa sig svo að það verði ekki að krónísku vandamáli.&lt;/p&gt;
@@ -786,1020 +433,438 @@ Having nearly instant feedback enables you to have your creativity flow without 
 &lt;p&gt;Tilvísanir:&lt;/p&gt;
 
 &lt;p&gt;Irwin,M., Wang,M., Ribeiro, D., Cho, H., Olmstead, R., Breen, E., Martinez-Maza, O., Cole, S. (2009). Sleep Loss Activates Cellular Inflammatory Signaling. Biological Psychiatry, Árgangur 64, Rit 6, blaðsíður 538-540.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Fæðingarþunglyndi eða meðgönguþunglyndi (post partum depression)</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/faedingarthunglyndi/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/faedingarthunglyndi/</guid>
+      <description>
 
-&lt;h4 id=&#34;single-template&#34;&gt;Single Template&lt;/h4&gt;
+&lt;h3 id=&#34;hvað-er-fæðingarþunglyndi&#34;&gt;Hvað er fæðingarþunglyndi?&lt;/h3&gt;
 
-&lt;p&gt;A single template is used to render a single piece of content. For example, an article or post would be a single piece of content and use a single template.&lt;/p&gt;
+&lt;p&gt;Ef þunglyndiseinkenni koma fram innan 4 vikna frá fæðingu er það skilgreint sem fæðingarþunglyndi. Sömuleiðis ef um er að ræða þunga líðan eftir tvær vikur frá fæðingu ef hún er nær stöðug. Einkenni geta verið frá því að vera væg til þess að vera mjög sterk og fela í sér mikla vanlíðan. Væg einkenni þunglyndis og geðbrigða eru algeng og ber að vinna úr þeim með stuðningi, góðri hreyfingu, fjölbreyttu fæði og hvíld.
+Þegar verið er að tala um fæðingarþunglyndi er ekki átt við þungbæra líðan sem varir í einhverja stund eða jafnvel nokkra daga. Foreldrar eru undir miklu álagi fyrstu vikurnar eftir fæðingu, bæði líkamlega og andlega, og það er eðlilegt að mæður finni fyrir tímabundinni vanlíðan. Í flestum tilfellum tekst þeim að ná andlegu jafnvægi á ný. Fæðingarþunglyndi er öllu alvarlegra ástand. Allt að 13% kvenna geta fundið fyrir fæðingarþunglyndi (O´Hara &amp;amp; Swain, 1996) og samkvæmt danskri rannsókn á 5252 konum kom í ljós að 5,5% kvennanna sýndi merki um fæðingarþunglyndi 4 mánuðum eftir burð (Forman og fl. 2000).
+Þunglyndi og önnur geðbrigði geta auðveldlega komið fram á meðgöngunni sjálfri og líka eftir fæðingu. Geðbrigði eins og geðhvarfasýki eða jafnvel einkenni geðklofa geta komið fram í sumum tilfellum en það er afar sjaldgæft.&lt;/p&gt;
 
-&lt;h4 id=&#34;list-template&#34;&gt;List Template&lt;/h4&gt;
+&lt;h3 id=&#34;hvernig-er-hægt-að-sjá-hvort-um-fæðingarþunglyndi-sé-að-ræða&#34;&gt;Hvernig er hægt að sjá hvort um fæðingarþunglyndi sé að ræða?&lt;/h3&gt;
 
-&lt;p&gt;A list template renders a group of related content. That could be a summary of recent postings or all articles in a category. List templates can contain multiple groups.&lt;/p&gt;
+&lt;p&gt;Þunglyndiseinkenni þurfa að vera viðvarandi í tvær vikur og þá fleiri en eitt (helst a.m.k. fimm). Helstu einkenni fæðingarþunglyndis eru svipuð og þunglyndiseinkenni eru almennt:
+- Óeirð og skapsveiflur.
+- Leiði, vonleysi og yfirþyrmandi líðan.
+- Mikill grátur.
+- Orkuleysi og lítil hvatning til verka.
+- Þyngdarbreytingar og breytt matarlöngun.
+- Svefnraskanir. Of mikill svefn eða of lítill.
+- Einbeitingarskortur, tvístígandi viðmót og óákveðni.
+- Gleymni.
+- Lágt sjálfsmat og lítið sjálfstraust.
+- Ánægjusnauð tilvera.
+- Einangrun.
+- Hausverkir, magaverkir og aðrir óskilgreindir verkir langvarandi.
+- Hægar hreyfingar og mikil deyfð.
+- Hugsanir um dauða og sjálfskaðandi hugsanir.
+Læknar og aðrir meðferðaraðilar eru þjálfaðir í að meta alvarleika slíkra einkenna. Það er varasamt að sjúkdómsgreina sig sjálfur, því það er oft erfitt að gera sér grein fyrir einkennunum en afar mikilvægt er að leita sér strax aðstoðar ef minnsti grunur vaknar. Það er líka áríðandi að gera greinarmun á þunglyndi og þeirri tímabundinni depurð sem talið er að 70% kvenna finni fyrir eftir barnsburð (DSM-IV-TR, 2000). Leitið því fljótt til læknis eða meðferðaraðila ef einkenni eru viðvarandi í tvær vikur eða lengur. Ekki síst ef móðirin á í erfiðleikum með að sinna barninu eða sjálfri sér og enn frekar ef hún finnur fyrir þörf fyrir því að skaða sjálfa sig og fær þrálátar hugsanir um dauðann.&lt;/p&gt;
 
-&lt;p&gt;The homepage template is a special type of list template. Hugo assumes that the home page of your site will act as the portal for the rest of the content in the site.&lt;/p&gt;
+&lt;h3 id=&#34;orsakir-fæðingarþunglyndis&#34;&gt;Orsakir fæðingarþunglyndis&lt;/h3&gt;
 
-&lt;h4 id=&#34;partial-template&#34;&gt;Partial Template&lt;/h4&gt;
+&lt;p&gt;Það er almennt ekki talið að einhver ein ástæða frekar en önnur liggi að baki þunglyndi, heldur að þetta sé samspil erfða og umhverfis. Þó er talið að meiri líkur séu á þunglyndi ef fyrir því er fjölskyldusaga. Mikið er horft til taugasálfræði og reynt að sjá hvaða breytingar verða á heilaboðum við þunglyndi. Streita og áföll eru talin geta aukið líkur á þunglyndi.&lt;/p&gt;
 
-&lt;p&gt;A partial template is a template that can be included in other templates. Partial templates must be called using the “partial” template command. They are very handy for rolling up common behavior. For example, your site may have a banner that all pages use. Instead of copying the text of the banner into every single and list template, you could create a partial with the banner in it. That way if you decide to change the banner, you only have to change the partial template.&lt;/p&gt;
+&lt;p&gt;Samkvæmt rannsóknum eru eftirfarandi þættir á meðal mögulegra áhættuvalda að fæðingarþunglyndi
+● Hafi konan fundið fyrir geðsjúkdómum áður og fundið fyrir geðbrigðum á meðgöngutímanum geta verið auknar líkur á fæðingarþunglyndi. Sömuleiðis slæm samskipti í sambúð og lélegur félagslegur stuðningur ásamt miklu álagi eða áföllum í lífinu. Einnig er talið að bágar félagslegar aðstæður auki líkur á meðgönguþunglyndi (O´Hara &amp;amp; Swain, 1996) (Forman og fl. 2000).
+●Lélegt sjálfstraust, streita vegna barnsins og uppeldishlutverksins og meðgöngukvíði eru þættir sem gefa vísbendingu um og geta verið orsakavaldar í meðgönguþunglyndi (Beck &amp;amp; Tatano, 2001).
+●Það er ekki talið að erfiðleikar í fæðingu sé áhrifavaldur að fæðingarþunglyndi.
+●Íslenskar rannsóknir styðja við niðurstöður úr erlendum rannsóknir á mögulegum áhrifavöldum og hafa þar að auki sýnt fram á að áfengisneysla á heimili geti líka haft áhrif á meðgönguþunglyndi. (Karlsdóttir og fl. 2007), (Lýðsdóttir og fl., 2008).
+Hormónabreytingar eru líka taldar vera áhættuþáttur þar sem þunglyndi á það til að koma frekar fram á gelgjuskeiði stúlkna, þegar konur eru á blæðingum, þegar þær fara á breytingarskeiðið og svo á meðgöngu og eftir fæðingu. Það er talið að breytingar á estrógen og progesterone hormónum eigi hér hlut að máli, en á meðgöngunni er mikil aukning á þessum hórmónum. Framleiðsla skjaldkirtilshormóna dettur niður hjá konum eftir barnsfæðingu og það getur verið ein ástæða þess að matarlyst og matarlöngun breytist og bæði valdið þyngdarbreytingum og kallað fram þunglyndiseinkenni. Einföld blóðprufa getur sýnt fram á hvort slíkt sé í gangi og þá eru til við því lyf.
+Aðrar orsakir geta verið þreyta eftir burð, svefnleysi og svefntruflanir vegna barns, kvíði vegna barnsins, lítið sjálfstraust til móðurhlutverksins, félagsleg einangrun frá (vinnu)félögum og einvera heima, fullkomnunarárátta, töpuð sjálfsmynd, óánægja með líkamsbreytingar eða að konan telji sig ekki eins aðlaðandi og áður og ekki síst tímaskortur til þess að sinna sér sjálfri. Allt þetta í einni eða annarri mynd getur valdið vanlíðan og vonleysi sem erfitt er að sjá fram úr.&lt;/p&gt;
 
-&lt;h2 id=&#34;create-a-new-site&#34;&gt;Create a New Site&lt;/h2&gt;
+&lt;p&gt;Rugl í lyfjagjöf
+Það er oft sem konur hætta lyfjameðferð eða breyta miklu í mataræði og í inntöku á ýmsum fæðubótaefnum. Það er best að fara yfir allar slíkar meðferðir með sínum lækni, því breytingar á lyfjameðferð eða í neyslu á fæðubótaefnum getur framkallað breytingar á líðan. Þótt eitt henti sumum, stundum, er ekki víst að það henti öllum, alltaf. Ég mæli samt alltaf með Lýsi eða Omega3.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s use Hugo to create a new web site. I&amp;rsquo;m a Mac user, so I&amp;rsquo;ll create mine in my home directory, in the Sites folder. If you&amp;rsquo;re using Linux, you might have to create the folder first.&lt;/p&gt;
+&lt;h3 id=&#34;nokkur-góð-ráð-en-ekki-tæmandi-listi&#34;&gt;Nokkur góð ráð, en ekki tæmandi listi:&lt;/h3&gt;
 
-&lt;p&gt;The &amp;ldquo;new site&amp;rdquo; command will create a skeleton of a site. It will give you the basic directory structure and a useable configuration file.&lt;/p&gt;
+&lt;p&gt;Hvíldu þig eins mikið og hægt er og eins oft og hægt er. Sofðu þegar barnið sefur.
+Ekki reyna of mikið á fullkomnunaráráttuna. Slakaðu aðeins á eigin kröfum og væntingum.
+Vertu dugleg að sækja aðstoð til maka, fjölskyldu, vina og vinnufélaga.
+Reyndu að finna tíma til þess að fara út og vera á meðal fólks.
+Ræddu þína líðan og tilfinningar við maka, fjölskyldu og vini.
+Ræddu við aðrar mæður um þín vandamál, t.d. á netinu.
+Sæktu stuðningsfundi eða mömmumorgna með öðrum mæðrum, t.d. í kirkjunni þinni.
+Forðastu miklar og/eða stórar ákvarðanatökur á meðan meðgöngu stendur eða stuttu eftir burð, til að forðast álag vegna fyrirhugaðra breytinga.
+Ef breytinga er þörf reyndu að fá alla þá aðstoð sem hægt er í þá vinnu.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ hugo new site ~/Sites/zafta
-$ cd ~/Sites/zafta
-$ ls -l
-total 8
-drwxr-xr-x  7 quoha  staff  238 Sep 29 16:49 .
-drwxr-xr-x  3 quoha  staff  102 Sep 29 16:49 ..
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 archetypes
--rw-r--r--  1 quoha  staff   82 Sep 29 16:49 config.toml
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 content
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 layouts
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 static
-$
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;meðferðaleiðir&#34;&gt;Meðferðaleiðir:&lt;/h3&gt;
 
-&lt;p&gt;Take a look in the content/ directory to confirm that it is empty.&lt;/p&gt;
+&lt;p&gt;Samtalsmeðferð hjá sálfræðingi eða félagsráðgjafa eða öðrum meðferðaraðilum t.d. hjá félagsmálayfirvöldum. Best er að leita til síns heimilislæknis ef skoða á lyfjagjöf. Séu einkenni sterk og blönduð öðrum geðbrigðum eins og geðhvarfasýki eða geðklofa er best að ráðfæra sig við geðlækni.
+Samkvæmt rannsóknum gefur blönduð meðferð þessara tveggja aðferða, samtalsmeðferðar og lyfjagjafar, bestu útkomu á því að meðhöndla þunglyndi.
+Óhefðbundnar leiðir eins og jóga, nudd, ilmolíumeðferðir og leikfimi geta gert kraftaverk. Aðalatriðið er að koma sér í að gera það sem viðkomandi konu finnst skemmtilegt og gefur henni smám saman sátt og trú á framtíð sína með nýfæddu barni sínu. Það má vera að mæðrum finnist að sumt sé ekki eins og þær höfðu hugsað sér að það ætti að vera, en þú ert þarna og barnið er þarna og á þeim punkti má alltaf byrja.&lt;/p&gt;
 
-&lt;p&gt;The other directories (archetypes/, layouts/, and static/) are used when customizing a theme. That&amp;rsquo;s a topic for a different tutorial, so please ignore them for now.&lt;/p&gt;
-
-&lt;h3 id=&#34;generate-the-html-for-the-new-site&#34;&gt;Generate the HTML For the New Site&lt;/h3&gt;
-
-&lt;p&gt;Running the &lt;code&gt;hugo&lt;/code&gt; command with no options will read all the available content and generate the HTML files. It will also copy all static files (that&amp;rsquo;s everything that&amp;rsquo;s not content). Since we have an empty site, it won&amp;rsquo;t do much, but it will do it very quickly.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo --verbose
-INFO: 2014/09/29 Using config file: config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-WARN: 2014/09/29 Unable to locate layout: [index.html _default/list.html _default/single.html]
-WARN: 2014/09/29 Unable to locate layout: [404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 2 ms
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The &amp;ldquo;&lt;code&gt;--verbose&lt;/code&gt;&amp;rdquo; flag gives extra information that will be helpful when we build the template. Every line of the output that starts with &amp;ldquo;INFO:&amp;rdquo; or &amp;ldquo;WARN:&amp;rdquo; is present because we used that flag. The lines that start with &amp;ldquo;WARN:&amp;rdquo; are warning messages. We&amp;rsquo;ll go over them later.&lt;/p&gt;
-
-&lt;p&gt;We can verify that the command worked by looking at the directory again.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ls -l
-total 8
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 archetypes
--rw-r--r--  1 quoha  staff   82 Sep 29 16:49 config.toml
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 content
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 layouts
-drwxr-xr-x  4 quoha  staff  136 Sep 29 17:02 public
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 static
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;See that new public/ directory? Hugo placed all generated content there. When you&amp;rsquo;re ready to publish your web site, that&amp;rsquo;s the place to start. For now, though, let&amp;rsquo;s just confirm that we have what we&amp;rsquo;d expect from a site with no content.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ls -l public
-total 16
--rw-r--r--  1 quoha  staff  416 Sep 29 17:02 index.xml
--rw-r--r--  1 quoha  staff  262 Sep 29 17:02 sitemap.xml
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Hugo created two XML files, which is standard, but there are no HTML files.&lt;/p&gt;
-
-&lt;h3 id=&#34;test-the-new-site&#34;&gt;Test the New Site&lt;/h3&gt;
-
-&lt;p&gt;Verify that you can run the built-in web server. It will dramatically shorten your development cycle if you do. Start it by running the &amp;ldquo;server&amp;rdquo; command. If it is successful, you will see output similar to the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo server --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-WARN: 2014/09/29 Unable to locate layout: [index.html _default/list.html _default/single.html]
-WARN: 2014/09/29 Unable to locate layout: [404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 2 ms
-Serving pages from /Users/quoha/Sites/zafta/public
-Web Server is available at http://localhost:1313
-Press Ctrl+C to stop
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Connect to the listed URL (it&amp;rsquo;s on the line that starts with &amp;ldquo;Web Server&amp;rdquo;). If everything is working correctly, you should get a page that shows the following:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;index.xml
-sitemap.xml
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That&amp;rsquo;s a listing of your public/ directory. Hugo didn&amp;rsquo;t create a home page because our site has no content. When there&amp;rsquo;s no index.html file in a directory, the server lists the files in the directory, which is what you should see in your browser.&lt;/p&gt;
-
-&lt;p&gt;Let’s go back and look at those warnings again.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;WARN: 2014/09/29 Unable to locate layout: [index.html _default/list.html _default/single.html]
-WARN: 2014/09/29 Unable to locate layout: [404.html]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That second warning is easier to explain. We haven’t created a template to be used to generate “page not found errors.” The 404 message is a topic for a separate tutorial.&lt;/p&gt;
-
-&lt;p&gt;Now for the first warning. It is for the home page. You can tell because the first layout that it looked for was “index.html.” That’s only used by the home page.&lt;/p&gt;
-
-&lt;p&gt;I like that the verbose flag causes Hugo to list the files that it&amp;rsquo;s searching for. For the home page, they are index.html, _default/list.html, and _default/single.html. There are some rules that we&amp;rsquo;ll cover later that explain the names and paths. For now, just remember that Hugo couldn&amp;rsquo;t find a template for the home page and it told you so.&lt;/p&gt;
-
-&lt;p&gt;At this point, you&amp;rsquo;ve got a working installation and site that we can build upon. All that’s left is to add some content and a theme to display it.&lt;/p&gt;
-
-&lt;h2 id=&#34;create-a-new-theme&#34;&gt;Create a New Theme&lt;/h2&gt;
-
-&lt;p&gt;Hugo doesn&amp;rsquo;t ship with a default theme. There are a few available (I counted a dozen when I first installed Hugo) and Hugo comes with a command to create new themes.&lt;/p&gt;
-
-&lt;p&gt;We&amp;rsquo;re going to create a new theme called &amp;ldquo;zafta.&amp;rdquo; Since the goal of this tutorial is to show you how to fill out the files to pull in your content, the theme will not contain any CSS. In other words, ugly but functional.&lt;/p&gt;
-
-&lt;p&gt;All themes have opinions on content and layout. For example, Zafta uses &amp;ldquo;post&amp;rdquo; over &amp;ldquo;blog&amp;rdquo;. Strong opinions make for simpler templates but differing opinions make it tougher to use themes. When you build a theme, consider using the terms that other themes do.&lt;/p&gt;
-
-&lt;h3 id=&#34;create-a-skeleton&#34;&gt;Create a Skeleton&lt;/h3&gt;
-
-&lt;p&gt;Use the hugo &amp;ldquo;new&amp;rdquo; command to create the skeleton of a theme. This creates the directory structure and places empty files for you to fill out.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo new theme zafta
-
-$ ls -l
-total 8
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 archetypes
--rw-r--r--  1 quoha  staff   82 Sep 29 16:49 config.toml
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 content
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 layouts
-drwxr-xr-x  4 quoha  staff  136 Sep 29 17:02 public
-drwxr-xr-x  2 quoha  staff   68 Sep 29 16:49 static
-drwxr-xr-x  3 quoha  staff  102 Sep 29 17:31 themes
-
-$ find themes -type f | xargs ls -l
--rw-r--r--  1 quoha  staff  1081 Sep 29 17:31 themes/zafta/LICENSE.md
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/archetypes/default.md
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/layouts/_default/list.html
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/layouts/_default/single.html
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/layouts/index.html
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/layouts/partials/footer.html
--rw-r--r--  1 quoha  staff     0 Sep 29 17:31 themes/zafta/layouts/partials/header.html
--rw-r--r--  1 quoha  staff    93 Sep 29 17:31 themes/zafta/theme.toml
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The skeleton includes templates (the files ending in .html), license file, a description of your theme (the theme.toml file), and an empty archetype.&lt;/p&gt;
-
-&lt;p&gt;Please take a minute to fill out the theme.toml and LICENSE.md files. They&amp;rsquo;re optional, but if you&amp;rsquo;re going to be distributing your theme, it tells the world who to praise (or blame). It&amp;rsquo;s also nice to declare the license so that people will know how they can use the theme.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/theme.toml
-author = &amp;quot;michael d henderson&amp;quot;
-description = &amp;quot;a minimal working template&amp;quot;
-license = &amp;quot;MIT&amp;quot;
-name = &amp;quot;zafta&amp;quot;
-source_repo = &amp;quot;&amp;quot;
-tags = [&amp;quot;tags&amp;quot;, &amp;quot;categories&amp;quot;]
-:wq
-
-## also edit themes/zafta/LICENSE.md and change
-## the bit that says &amp;quot;YOUR_NAME_HERE&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Note that the the skeleton&amp;rsquo;s template files are empty. Don&amp;rsquo;t worry, we&amp;rsquo;ll be changing that shortly.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find themes/zafta -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/_default/list.html
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/_default/single.html
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/index.html
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/partials/footer.html
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/partials/header.html
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;update-the-configuration-file-to-use-the-theme&#34;&gt;Update the Configuration File to Use the Theme&lt;/h3&gt;
-
-&lt;p&gt;Now that we&amp;rsquo;ve got a theme to work with, it&amp;rsquo;s a good idea to add the theme name to the configuration file. This is optional, because you can always add &amp;ldquo;-t zafta&amp;rdquo; on all your commands. I like to put it the configuration file because I like shorter command lines. If you don&amp;rsquo;t put it in the configuration file or specify it on the command line, you won&amp;rsquo;t use the template that you&amp;rsquo;re expecting to.&lt;/p&gt;
-
-&lt;p&gt;Edit the file to add the theme, add a title for the site, and specify that all of our content will use the TOML format.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi config.toml
-theme = &amp;quot;zafta&amp;quot;
-baseurl = &amp;quot;&amp;quot;
-languageCode = &amp;quot;en-us&amp;quot;
-title = &amp;quot;zafta - totally refreshing&amp;quot;
-MetaDataFormat = &amp;quot;toml&amp;quot;
-:wq
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;generate-the-site&#34;&gt;Generate the Site&lt;/h3&gt;
-
-&lt;p&gt;Now that we have an empty theme, let&amp;rsquo;s generate the site again.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 2 ms
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Did you notice that the output is different? The warning message for the home page has disappeared and we have an additional information line saying that Hugo is syncing from the theme&amp;rsquo;s directory.&lt;/p&gt;
-
-&lt;p&gt;Let&amp;rsquo;s check the public/ directory to see what Hugo&amp;rsquo;s created.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ ls -l public
-total 16
-drwxr-xr-x  2 quoha  staff   68 Sep 29 17:56 css
--rw-r--r--  1 quoha  staff    0 Sep 29 17:56 index.html
--rw-r--r--  1 quoha  staff  407 Sep 29 17:56 index.xml
-drwxr-xr-x  2 quoha  staff   68 Sep 29 17:56 js
--rw-r--r--  1 quoha  staff  243 Sep 29 17:56 sitemap.xml
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice four things:&lt;/p&gt;
+&lt;p&gt;Þunglyndi er ekki feimnismál og það er engin þörf á að skammast sín fyrir sína vanlíðan. Það þarf ekki að bæta þeim bitra bikar við það sem fyrir er. Þetta er því miður algengt eins og fram hefur komið og nýmæður eiga alla samúð og rétt á aðstoð við að komast yfir sína vanlíðan, sem eftir allt er oftast tilfallandi og rætist úr hjá flestum. Fái mæðurnar faglega aðstoð og viðeigandi meðferð eru þær fljótari að jafna sig. Líði langur tími þar til mæður sem þurfa faglega aðstoð hefji meðferð geta einkenni magnast og kallað fram önnur og verri einkenni. Leitið því aðstoðar fagfólks sem fyrst. Takið ykkur sem fyrst í sátt, þrátt fyrir vanlíðan og einhvern bömmer.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>GOTT UPPELDI - TÍU BOÐORÐ</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/gottuppeldi10bodord/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/gottuppeldi10bodord/</guid>
+      <description>&lt;p&gt;Hér eru tíu helstu atriðin sem segja til um hvort uppeldið sé í góðum farvegi og gefi barninu öflugt veganesti út í lífið. Þessi listi byggir á sálfræðilegum rannsóknum og gefur forspá um hamingju barns, heilsu þess og árangur í lífinu.&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Hugo created a home page. This is the file public/index.html.&lt;/li&gt;
-&lt;li&gt;Hugo created a css/ directory.&lt;/li&gt;
-&lt;li&gt;Hugo created a js/ directory.&lt;/li&gt;
-&lt;li&gt;Hugo claimed that it created 0 pages. It created a file and copied over static files, but didn&amp;rsquo;t create any pages. That&amp;rsquo;s because it considers a &amp;ldquo;page&amp;rdquo; to be a file created directly from a content file. It doesn&amp;rsquo;t count things like the index.html files that it creates automatically.&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Ást og umhyggja
+Stuðningur ykkar sem foreldrar, að þið samþykkið barnið eins og það er, sýnið því ástúð í verki og eigið saman gæðastundir. Íslenskar rannsóknir styðja við þetta en á meðal þess sem hefur komið fram er að samverustundir með foreldrum sé eitt af lykilatriðum í vímuefnaforvörnum. Fróðleiksfúsir geta til dæmis kynnt sér efnið nánar á heimasíðu forvarnardagsins.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Streitustjórnun&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h4 id=&#34;the-home-page&#34;&gt;The Home Page&lt;/h4&gt;
-
-&lt;p&gt;Hugo supports many different types of templates. The home page is special because it gets its own type of template and its own template file. The file, layouts/index.html, is used to generate the HTML for the home page. The Hugo documentation says that this is the only required template, but that depends. Hugo&amp;rsquo;s warning message shows that it looks for three different templates:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;WARN: 2014/09/29 Unable to locate layout: [index.html _default/list.html _default/single.html]
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;If it can&amp;rsquo;t find any of these, it completely skips creating the home page. We noticed that when we built the site without having a theme installed.&lt;/p&gt;
-
-&lt;p&gt;When Hugo created our theme, it created an empty home page template. Now, when we build the site, Hugo finds the template and uses it to generate the HTML for the home page. Since the template file is empty, the HTML file is empty, too. If the template had any rules in it, then Hugo would have used them to generate the home page.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find . -name index.html | xargs ls -l
--rw-r--r--  1 quoha  staff  0 Sep 29 20:21 ./public/index.html
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 ./themes/zafta/layouts/index.html
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;the-magic-of-static&#34;&gt;The Magic of Static&lt;/h4&gt;
-
-&lt;p&gt;Hugo does two things when generating the site. It uses templates to transform content into HTML and it copies static files into the site. Unlike content, static files are not transformed. They are copied exactly as they are.&lt;/p&gt;
-
-&lt;p&gt;Hugo assumes that your site will use both CSS and JavaScript, so it creates directories in your theme to hold them. Remember opinions? Well, Hugo&amp;rsquo;s opinion is that you&amp;rsquo;ll store your CSS in a directory named css/ and your JavaScript in a directory named js/. If you don&amp;rsquo;t like that, you can change the directory names in your theme directory or even delete them completely. Hugo&amp;rsquo;s nice enough to offer its opinion, then behave nicely if you disagree.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find themes/zafta -type d | xargs ls -ld
-drwxr-xr-x  7 quoha  staff  238 Sep 29 17:38 themes/zafta
-drwxr-xr-x  3 quoha  staff  102 Sep 29 17:31 themes/zafta/archetypes
-drwxr-xr-x  5 quoha  staff  170 Sep 29 17:31 themes/zafta/layouts
-drwxr-xr-x  4 quoha  staff  136 Sep 29 17:31 themes/zafta/layouts/_default
-drwxr-xr-x  4 quoha  staff  136 Sep 29 17:31 themes/zafta/layouts/partials
-drwxr-xr-x  4 quoha  staff  136 Sep 29 17:31 themes/zafta/static
-drwxr-xr-x  2 quoha  staff   68 Sep 29 17:31 themes/zafta/static/css
-drwxr-xr-x  2 quoha  staff   68 Sep 29 17:31 themes/zafta/static/js
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&#34;the-theme-development-cycle&#34;&gt;The Theme Development Cycle&lt;/h2&gt;
-
-&lt;p&gt;When you&amp;rsquo;re working on a theme, you will make changes in the theme&amp;rsquo;s directory, rebuild the site, and check your changes in the browser. Hugo makes this very easy:&lt;/p&gt;
+&lt;p&gt;Að þið takið sjálf tíma til að takast á við kvíða og áhyggjur. Að barnið finni að streita sé eitthvað sem unnið er með og unnið er úr. Þjálfa sig í slökun og gefa jákvæða túlkun á því sem er að gerast í kringum barnið.&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Purge the public/ directory.&lt;/li&gt;
-&lt;li&gt;Run the built in web server in watch mode.&lt;/li&gt;
-&lt;li&gt;Open your site in a browser.&lt;/li&gt;
-&lt;li&gt;Update the theme.&lt;/li&gt;
-&lt;li&gt;Glance at your browser window to see changes.&lt;/li&gt;
-&lt;li&gt;Return to step 4.&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Samskiptahæfileikar
+Að eiga góð samskipti við hitt foreldrið og aðra sem koma nálægt uppeldi barnsins. Ekki síður að eiga góð og uppbyggjandi samskipti við annað fólk.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Stuðningur og sjálfstæði
+Að styðja barnið með virðingu og styrkja það til að vera sjálfum sér nægt og treysta á sig sjálft.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Menntun og kennsla
+Að styðja og gefa barninu þá fyrirmynd að nám sé æskilegt og gefandi fyrir barnið. Ekki síður að sjá til þess að valkostir í gefandi námi séu til staðar.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Lífsleikni
+Að barnið finni að það þurfi ekki að óttast afkomu sína. Að innkoma sé örugg fyrir fjölskylduna og framtíðin trygg.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Stjórn á hegðun
+Að nota frekar jákvæða styrkingu (það er að verðlauna góða hegðun, en ekki refsa fyrir óæskilega) og refsa aðeins ef aðrar leiðir hafa ekki náð neinum árangri.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Heilsa
+Að þið hafið heilbrigða lífshætti og góðar lífsvenjur. Að æfa sig reglulega og nærast á sem bestan hátt.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Siðferðisleg samvera
+Að barnið finni fyrir því að uppeldið og samveran sé gott siðferði sem sé í góðu samræmi við líðan þess og vinni vel úr tilfinninglegri líðan barnsins. Að barnið taki þátt í samverustundum og félagslega jákvæðum uppákomum.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Öryggi
+Forvarnir til að vernda barnið og halda vöku þess fyrir hegðun og samveru með félögum.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;I’ll throw in one more opinion: never work on a theme on a live site. Always work on a copy of your site. Make changes to your theme, test them, then copy them up to your site. For added safety, use a tool like Git to keep a revision history of your content and your theme. Believe me when I say that it is too easy to lose both your mind and your changes.&lt;/p&gt;
-
-&lt;p&gt;Check the main Hugo site for information on using Git with Hugo.&lt;/p&gt;
-
-&lt;h3 id=&#34;purge-the-public-directory&#34;&gt;Purge the public/ Directory&lt;/h3&gt;
-
-&lt;p&gt;When generating the site, Hugo will create new files and update existing ones in the &lt;code&gt;public/&lt;/code&gt; directory. It will not delete files that are no longer used. For example, files that were created in the wrong directory or with the wrong title will remain. If you leave them, you might get confused by them later. I recommend cleaning out your site prior to generating it.&lt;/p&gt;
-
-&lt;p&gt;Note: If you&amp;rsquo;re building on an SSD, you should ignore this. Churning on a SSD can be costly.&lt;/p&gt;
-
-&lt;h3 id=&#34;hugo-s-watch-option&#34;&gt;Hugo&amp;rsquo;s Watch Option&lt;/h3&gt;
-
-&lt;p&gt;Hugo&amp;rsquo;s &amp;ldquo;&lt;code&gt;--watch&lt;/code&gt;&amp;rdquo; option will monitor the content/ and your theme directories for changes and rebuild the site automatically.&lt;/p&gt;
-
-&lt;h3 id=&#34;live-reload&#34;&gt;Live Reload&lt;/h3&gt;
-
-&lt;p&gt;Hugo&amp;rsquo;s built in web server supports live reload. As pages are saved on the server, the browser is told to refresh the page. Usually, this happens faster than you can say, &amp;ldquo;Wow, that&amp;rsquo;s totally amazing.&amp;rdquo;&lt;/p&gt;
-
-&lt;h3 id=&#34;development-commands&#34;&gt;Development Commands&lt;/h3&gt;
-
-&lt;p&gt;Use the following commands as the basis for your workflow.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;## purge old files. hugo will recreate the public directory.
-##
-$ rm -rf public
-##
-## run hugo in watch mode
-##
-$ hugo server --watch --verbose
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Here&amp;rsquo;s sample output showing Hugo detecting a change to the template for the home page. Once generated, the web browser automatically reloaded the page. I&amp;rsquo;ve said this before, it&amp;rsquo;s amazing.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -rf public
-$ hugo server --watch --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 2 ms
-Watching for changes in /Users/quoha/Sites/zafta/content
-Serving pages from /Users/quoha/Sites/zafta/public
-Web Server is available at http://localhost:1313
-Press Ctrl+C to stop
-INFO: 2014/09/29 File System Event: [&amp;quot;/Users/quoha/Sites/zafta/themes/zafta/layouts/index.html&amp;quot;: MODIFY|ATTRIB]
-Change detected, rebuilding site
+&lt;p&gt;Þótt margar af þessum rannsóknum séu miðaðar við bandarískar aðstæður er engin ástæða til annars en að virða hugmyndirnar og gera það besta sem hverju foreldri býðst í aðstæðum. Atriðin eru leiðbeinandi og hægt er að aðlaga margs kyns uppeldisaðferðir að þeim, en það er verk sem hvert og eitt foreldri þarf að gera upp við sig. Listinn er þannig upp settur að þau atriði sem eru talin áhrifaríkari eru ofar.&lt;/p&gt;
 
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 1 ms
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Heimildir:
+Robert Epstein. 2010. What Makes a Good Parent? Scientific American Mind. November/December. Bls. 46.&lt;/p&gt;
 
-&lt;h2 id=&#34;update-the-home-page-template&#34;&gt;Update the Home Page Template&lt;/h2&gt;
-
-&lt;p&gt;The home page is one of a few special pages that Hugo creates automatically. As mentioned earlier, it looks for one of three files in the theme&amp;rsquo;s layout/ directory:&lt;/p&gt;
+&lt;p&gt;Frétt af Vísi.is frá 25. maí 2007, vistuð á vef HR. Slóðin er: &lt;a href=&#34;http://www.hr.is/lisalib/getfile.aspx?itemid=12225&#34;&gt;http://www.hr.is/lisalib/getfile.aspx?itemid=12225&lt;/a&gt;&lt;/p&gt;
 
-&lt;ol&gt;
-&lt;li&gt;index.html&lt;/li&gt;
-&lt;li&gt;_default/list.html&lt;/li&gt;
-&lt;li&gt;_default/single.html&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;We could update one of the default templates, but a good design decision is to update the most specific template available. That&amp;rsquo;s not a hard and fast rule (in fact, we&amp;rsquo;ll break it a few times in this tutorial), but it is a good generalization.&lt;/p&gt;
-
-&lt;h3 id=&#34;make-a-static-home-page&#34;&gt;Make a Static Home Page&lt;/h3&gt;
-
-&lt;p&gt;Right now, that page is empty because we don&amp;rsquo;t have any content and we don&amp;rsquo;t have any logic in the template. Let&amp;rsquo;s change that by adding some text to the template.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;p&amp;gt;hugo says hello!&amp;lt;/p&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-:wq
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Build the web site and then verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-0 pages created
-0 tags created
-0 categories created
-in 2 ms
-
-$ find public -type f -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff  78 Sep 29 21:26 public/index.html
-
-$ cat public/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;p&amp;gt;hugo says hello!&amp;lt;/p&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&#34;live-reload-1&#34;&gt;Live Reload&lt;/h4&gt;
-
-&lt;p&gt;Note: If you&amp;rsquo;re running the server with the &lt;code&gt;--watch&lt;/code&gt; option, you&amp;rsquo;ll see different content in the file:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cat public/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;p&amp;gt;hugo says hello!&amp;lt;/p&amp;gt;
-&amp;lt;script&amp;gt;document.write(&#39;&amp;lt;script src=&amp;quot;http://&#39;
-        + (location.host || &#39;localhost&#39;).split(&#39;:&#39;)[0]
-    + &#39;:1313/livereload.js?mindelay=10&amp;quot;&amp;gt;&amp;lt;/&#39;
-        + &#39;script&amp;gt;&#39;)&amp;lt;/script&amp;gt;&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;When you use &lt;code&gt;--watch&lt;/code&gt;, the Live Reload script is added by Hugo. Look for live reload in the documentation to see what it does and how to disable it.&lt;/p&gt;
-
-&lt;h3 id=&#34;build-a-dynamic-home-page&#34;&gt;Build a &amp;ldquo;Dynamic&amp;rdquo; Home Page&lt;/h3&gt;
-
-&lt;p&gt;&amp;ldquo;Dynamic home page?&amp;rdquo; Hugo&amp;rsquo;s a static web site generator, so this seems an odd thing to say. I mean let&amp;rsquo;s have the home page automatically reflect the content in the site every time Hugo builds it. We&amp;rsquo;ll use iteration in the template to do that.&lt;/p&gt;
-
-&lt;h4 id=&#34;create-new-posts&#34;&gt;Create New Posts&lt;/h4&gt;
-
-&lt;p&gt;Now that we have the home page generating static content, let&amp;rsquo;s add some content to the site. We&amp;rsquo;ll display these posts as a list on the home page and on their own page, too.&lt;/p&gt;
-
-&lt;p&gt;Hugo has a command to generate a skeleton post, just like it does for sites and themes.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ hugo --verbose new post/first.md
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 attempting to create  post/first.md of post
-INFO: 2014/09/29 curpath: /Users/quoha/Sites/zafta/themes/zafta/archetypes/default.md
-ERROR: 2014/09/29 Unable to Cast &amp;lt;nil&amp;gt; to map[string]interface{}
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;That wasn&amp;rsquo;t very nice, was it?&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;new&amp;rdquo; command uses an archetype to create the post file. Hugo created an empty default archetype file, but that causes an error when there&amp;rsquo;s a theme. For me, the workaround was to create an archetypes file specifically for the post type.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/archetypes/post.md
-+++
-Description = &amp;quot;&amp;quot;
-Tags = []
-Categories = []
-+++
-:wq
-
-$ find themes/zafta/archetypes -type f | xargs ls -l
--rw-r--r--  1 quoha  staff   0 Sep 29 21:53 themes/zafta/archetypes/default.md
--rw-r--r--  1 quoha  staff  51 Sep 29 21:54 themes/zafta/archetypes/post.md
-
-$ hugo --verbose new post/first.md
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 attempting to create  post/first.md of post
-INFO: 2014/09/29 curpath: /Users/quoha/Sites/zafta/themes/zafta/archetypes/post.md
-INFO: 2014/09/29 creating /Users/quoha/Sites/zafta/content/post/first.md
-/Users/quoha/Sites/zafta/content/post/first.md created
-
-$ hugo --verbose new post/second.md
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 attempting to create  post/second.md of post
-INFO: 2014/09/29 curpath: /Users/quoha/Sites/zafta/themes/zafta/archetypes/post.md
-INFO: 2014/09/29 creating /Users/quoha/Sites/zafta/content/post/second.md
-/Users/quoha/Sites/zafta/content/post/second.md created
-
-$ ls -l content/post
-total 16
--rw-r--r--  1 quoha  staff  104 Sep 29 21:54 first.md
--rw-r--r--  1 quoha  staff  105 Sep 29 21:57 second.md
-
-$ cat content/post/first.md
-+++
-Categories = []
-Description = &amp;quot;&amp;quot;
-Tags = []
-date = &amp;quot;2014-09-29T21:54:53-05:00&amp;quot;
-title = &amp;quot;first&amp;quot;
-
-+++
-my first post
-
-$ cat content/post/second.md
-+++
-Categories = []
-Description = &amp;quot;&amp;quot;
-Tags = []
-date = &amp;quot;2014-09-29T21:57:09-05:00&amp;quot;
-title = &amp;quot;second&amp;quot;
-
-+++
-my second post
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Build the web site and then verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -rf public
-$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 found taxonomies: map[string]string{&amp;quot;category&amp;quot;:&amp;quot;categories&amp;quot;, &amp;quot;tag&amp;quot;:&amp;quot;tags&amp;quot;}
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-2 pages created
-0 tags created
-0 categories created
-in 4 ms
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The output says that it created 2 pages. Those are our new posts:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find public -type f -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff  78 Sep 29 22:13 public/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:13 public/post/first/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:13 public/post/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:13 public/post/second/index.html
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;The new files are empty because because the templates used to generate the content are empty. The homepage doesn&amp;rsquo;t show the new content, either. We have to update the templates to add the posts.&lt;/p&gt;
+&lt;p&gt;Vefsíðan Forvarnardagur.is. Slóðin er: &lt;a href=&#34;http://www.forvarnardagur.is/&#34;&gt;http://www.forvarnardagur.is/&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>HINSEGIN, EÐA HVAÐ?</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/hinseginedahvad/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/hinseginedahvad/</guid>
+      <description>&lt;p&gt;Sá viðburður að koma út úr skápnum reynist flestum samkynhneigðum einstaklingum mjög erfið lífsreynsla. Þetta getur sömuleiðis verið erfið stund fyrir aðstandendur, maka, foreldra og börn. Ættingjar, vinir og vinnufélagar geta líka fundið fyrir áreitinu, en vanalega ekki í sama mæli og samkynhneigði einstaklingurinn sem finnur fyrir sínu eðli og vill lifa í samræmi við það. En hvers vegna er þessi lífsreynsla jafn spennuþrungin og raun ber vitni?&lt;/p&gt;
 
-&lt;h3 id=&#34;list-and-single-templates&#34;&gt;List and Single Templates&lt;/h3&gt;
+&lt;p&gt;Það sem skapar hvað mestu erfiðleikana við þessar aðstæður er sú staðalmynd sem hefur þróast með samfélaginu í árþúsundir um hvað telst eðlilegt. Þessi staðalmynd mótaðist af afkomu, þ.e. mikilvægi barneigna og þess að tryggja sér afkomendur. Þá var í lagi að vera alkóhólisti en það var talið sjúklegt að vera hommi. Samkynhneigð var fyrst tekin út úr DSM (Yfirlitshandbók yfir geðsjúkdóma) árið 1973, um svipað leyti og áfengissýkin bættist við listann. Á þeim tíma fór það að skipta meira máli að virka í samfélagi sem byggir mikið á samskiptum. Samkynhneigðir virka nefnilega vel í svoleiðis samfélagi en áfengissjúklingar síður.&lt;/p&gt;
 
-&lt;p&gt;In Hugo, we have three major kinds of templates. There&amp;rsquo;s the home page template that we updated previously. It is used only by the home page. We also have &amp;ldquo;single&amp;rdquo; templates which are used to generate output for a single content file. We also have &amp;ldquo;list&amp;rdquo; templates that are used to group multiple pieces of content before generating output.&lt;/p&gt;
+&lt;p&gt;Nýlegar rannsóknir á samkynhneigð hafa leitt í ljós marga líffræðilega þætti sem hafa áhrif á kynhneigð. Dr. Brian Mustanski gerir þessum atriðum mjög góð skil á &lt;a href=&#34;https://www.psychologytoday.com/blog/the-sexual-continuum/200901/cartoon-guide-sexual-orientation&#34;&gt;vefsíðu Psychology Today&lt;/a&gt; en til þess að tipla á því helsta:&lt;/p&gt;
 
-&lt;p&gt;Generally speaking, list templates are named &amp;ldquo;list.html&amp;rdquo; and single templates are named &amp;ldquo;single.html.&amp;rdquo;&lt;/p&gt;
-
-&lt;p&gt;There are three other types of templates: partials, content views, and terms. We will not go into much detail on these.&lt;/p&gt;
-
-&lt;h3 id=&#34;add-content-to-the-homepage&#34;&gt;Add Content to the Homepage&lt;/h3&gt;
-
-&lt;p&gt;The home page will contain a list of posts. Let&amp;rsquo;s update its template to add the posts that we just created. The logic in the template will run every time we build the site.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  {{ range first 10 .Data.Pages }}
-    &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  {{ end }}
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-:wq
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Hugo uses the Go template engine. That engine scans the template files for commands which are enclosed between &amp;ldquo;{{&amp;rdquo; and &amp;ldquo;}}&amp;rdquo;. In our template, the commands are:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;range&lt;/li&gt;
-&lt;li&gt;.Title&lt;/li&gt;
-&lt;li&gt;end&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;The &amp;ldquo;range&amp;rdquo; command is an iterator. We&amp;rsquo;re going to use it to go through the first ten pages. Every HTML file that Hugo creates is treated as a page, so looping through the list of pages will look at every file that will be created.&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;.Title&amp;rdquo; command prints the value of the &amp;ldquo;title&amp;rdquo; variable. Hugo pulls it from the front matter in the Markdown file.&lt;/p&gt;
-
-&lt;p&gt;The &amp;ldquo;end&amp;rdquo; command signals the end of the range iterator. The engine loops back to the top of the iteration when it finds &amp;ldquo;end.&amp;rdquo; Everything between the &amp;ldquo;range&amp;rdquo; and &amp;ldquo;end&amp;rdquo; is evaluated every time the engine goes through the iteration. In this file, that would cause the title from the first ten pages to be output as heading level one.&lt;/p&gt;
-
-&lt;p&gt;It&amp;rsquo;s helpful to remember that some variables, like .Data, are created before any output files. Hugo loads every content file into the variable and then gives the template a chance to process before creating the HTML files.&lt;/p&gt;
-
-&lt;p&gt;Build the web site and then verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -rf public
-$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 found taxonomies: map[string]string{&amp;quot;tag&amp;quot;:&amp;quot;tags&amp;quot;, &amp;quot;category&amp;quot;:&amp;quot;categories&amp;quot;}
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-2 pages created
-0 tags created
-0 categories created
-in 4 ms
-$ find public -type f -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff  94 Sep 29 22:23 public/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:23 public/post/first/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:23 public/post/index.html
--rw-r--r--  1 quoha  staff   0 Sep 29 22:23 public/post/second/index.html
-$ cat public/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-
-    &amp;lt;h1&amp;gt;second&amp;lt;/h1&amp;gt;
-
-    &amp;lt;h1&amp;gt;first&amp;lt;/h1&amp;gt;
-
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Congratulations, the home page shows the title of the two posts. The posts themselves are still empty, but let&amp;rsquo;s take a moment to appreciate what we&amp;rsquo;ve done. Your template now generates output dynamically. Believe it or not, by inserting the range command inside of those curly braces, you&amp;rsquo;ve learned everything you need to know to build a theme. All that&amp;rsquo;s really left is understanding which template will be used to generate each content file and becoming familiar with the commands for the template engine.&lt;/p&gt;
-
-&lt;p&gt;And, if that were entirely true, this tutorial would be much shorter. There are a few things to know that will make creating a new template much easier. Don&amp;rsquo;t worry, though, that&amp;rsquo;s all to come.&lt;/p&gt;
-
-&lt;h3 id=&#34;add-content-to-the-posts&#34;&gt;Add Content to the Posts&lt;/h3&gt;
-
-&lt;p&gt;We&amp;rsquo;re working with posts, which are in the content/post/ directory. That means that their section is &amp;ldquo;post&amp;rdquo; (and if we don&amp;rsquo;t do something weird, their type is also &amp;ldquo;post&amp;rdquo;).&lt;/p&gt;
-
-&lt;p&gt;Hugo uses the section and type to find the template file for every piece of content. Hugo will first look for a template file that matches the section or type name. If it can&amp;rsquo;t find one, then it will look in the _default/ directory. There are some twists that we&amp;rsquo;ll cover when we get to categories and tags, but for now we can assume that Hugo will try post/single.html, then _default/single.html.&lt;/p&gt;
-
-&lt;p&gt;Now that we know the search rule, let&amp;rsquo;s see what we actually have available:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find themes/zafta -name single.html | xargs ls -l
--rw-r--r--  1 quoha  staff  132 Sep 29 17:31 themes/zafta/layouts/_default/single.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;We could create a new template, post/single.html, or change the default. Since we don&amp;rsquo;t know of any other content types, let&amp;rsquo;s start with updating the default.&lt;/p&gt;
-
-&lt;p&gt;Remember, any content that we haven&amp;rsquo;t created a template for will end up using this template. That can be good or bad. Bad because I know that we&amp;rsquo;re going to be adding different types of content and we&amp;rsquo;re going to end up undoing some of the changes we&amp;rsquo;ve made. It&amp;rsquo;s good because we&amp;rsquo;ll be able to see immediate results. It&amp;rsquo;s also good to start here because we can start to build the basic layout for the site. As we add more content types, we&amp;rsquo;ll refactor this file and move logic around. Hugo makes that fairly painless, so we&amp;rsquo;ll accept the cost and proceed.&lt;/p&gt;
-
-&lt;p&gt;Please see the Hugo documentation on template rendering for all the details on determining which template to use. And, as the docs mention, if you&amp;rsquo;re building a single page application (SPA) web site, you can delete all of the other templates and work with just the default single page. That&amp;rsquo;s a refreshing amount of joy right there.&lt;/p&gt;
-
-&lt;h4 id=&#34;update-the-template-file&#34;&gt;Update the Template File&lt;/h4&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/_default/single.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-  &amp;lt;title&amp;gt;{{ .Title }}&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  {{ .Content }}
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-:wq
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Build the web site and verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -rf public
-$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 found taxonomies: map[string]string{&amp;quot;tag&amp;quot;:&amp;quot;tags&amp;quot;, &amp;quot;category&amp;quot;:&amp;quot;categories&amp;quot;}
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-2 pages created
-0 tags created
-0 categories created
-in 4 ms
-
-$ find public -type f -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff   94 Sep 29 22:40 public/index.html
--rw-r--r--  1 quoha  staff  125 Sep 29 22:40 public/post/first/index.html
--rw-r--r--  1 quoha  staff    0 Sep 29 22:40 public/post/index.html
--rw-r--r--  1 quoha  staff  128 Sep 29 22:40 public/post/second/index.html
-
-$ cat public/post/first/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-  &amp;lt;title&amp;gt;first&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;h1&amp;gt;first&amp;lt;/h1&amp;gt;
-  &amp;lt;p&amp;gt;my first post&amp;lt;/p&amp;gt;
-
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-
-$ cat public/post/second/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-  &amp;lt;title&amp;gt;second&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;h1&amp;gt;second&amp;lt;/h1&amp;gt;
-  &amp;lt;p&amp;gt;my second post&amp;lt;/p&amp;gt;
-
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice that the posts now have content. You can go to localhost:1313/post/first to verify.&lt;/p&gt;
-
-&lt;h3 id=&#34;linking-to-content&#34;&gt;Linking to Content&lt;/h3&gt;
-
-&lt;p&gt;The posts are on the home page. Let&amp;rsquo;s add a link from there to the post. Since this is the home page, we&amp;rsquo;ll update its template.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  {{ range first 10 .Data.Pages }}
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-  {{ end }}
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Build the web site and verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ rm -rf public
-$ hugo --verbose
-INFO: 2014/09/29 Using config file: /Users/quoha/Sites/zafta/config.toml
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/themes/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 syncing from /Users/quoha/Sites/zafta/static/ to /Users/quoha/Sites/zafta/public/
-INFO: 2014/09/29 found taxonomies: map[string]string{&amp;quot;tag&amp;quot;:&amp;quot;tags&amp;quot;, &amp;quot;category&amp;quot;:&amp;quot;categories&amp;quot;}
-WARN: 2014/09/29 Unable to locate layout: [404.html theme/404.html]
-0 draft content
-0 future content
-2 pages created
-0 tags created
-0 categories created
-in 4 ms
-
-$ find public -type f -name &#39;*.html&#39; | xargs ls -l
--rw-r--r--  1 quoha  staff  149 Sep 29 22:44 public/index.html
--rw-r--r--  1 quoha  staff  125 Sep 29 22:44 public/post/first/index.html
--rw-r--r--  1 quoha  staff    0 Sep 29 22:44 public/post/index.html
--rw-r--r--  1 quoha  staff  128 Sep 29 22:44 public/post/second/index.html
-
-$ cat public/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;/post/second/&amp;quot;&amp;gt;second&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;/post/first/&amp;quot;&amp;gt;first&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-
-$
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&#34;create-a-post-listing&#34;&gt;Create a Post Listing&lt;/h3&gt;
-
-&lt;p&gt;We have the posts displaying on the home page and on their own page. We also have a file public/post/index.html that is empty. Let&amp;rsquo;s make it show a list of all posts (not just the first ten).&lt;/p&gt;
-
-&lt;p&gt;We need to decide which template to update. This will be a listing, so it should be a list template. Let&amp;rsquo;s take a quick look and see which list templates are available.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find themes/zafta -name list.html | xargs ls -l
--rw-r--r--  1 quoha  staff  0 Sep 29 17:31 themes/zafta/layouts/_default/list.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;As with the single post, we have to decide to update _default/list.html or create post/list.html. We still don&amp;rsquo;t have multiple content types, so let&amp;rsquo;s stay consistent and update the default list template.&lt;/p&gt;
-
-&lt;h2 id=&#34;creating-top-level-pages&#34;&gt;Creating Top Level Pages&lt;/h2&gt;
-
-&lt;p&gt;Let&amp;rsquo;s add an &amp;ldquo;about&amp;rdquo; page and display it at the top level (as opposed to a sub-level like we did with posts).&lt;/p&gt;
-
-&lt;p&gt;The default in Hugo is to use the directory structure of the content/ directory to guide the location of the generated html in the public/ directory. Let&amp;rsquo;s verify that by creating an &amp;ldquo;about&amp;rdquo; page at the top level:&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi content/about.md
-+++
-title = &amp;quot;about&amp;quot;
-description = &amp;quot;about this site&amp;quot;
-date = &amp;quot;2014-09-27&amp;quot;
-slug = &amp;quot;about time&amp;quot;
-+++
-
-## about us
-
-i&#39;m speechless
-:wq
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Generate the web site and verify the results.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find public -name &#39;*.html&#39; | xargs ls -l
--rw-rw-r--  1 mdhender  staff   334 Sep 27 15:08 public/about-time/index.html
--rw-rw-r--  1 mdhender  staff   527 Sep 27 15:08 public/index.html
--rw-rw-r--  1 mdhender  staff   358 Sep 27 15:08 public/post/first-post/index.html
--rw-rw-r--  1 mdhender  staff     0 Sep 27 15:08 public/post/index.html
--rw-rw-r--  1 mdhender  staff   342 Sep 27 15:08 public/post/second-post/index.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice that the page wasn&amp;rsquo;t created at the top level. It was created in a sub-directory named &amp;lsquo;about-time/&amp;rsquo;. That name came from our slug. Hugo will use the slug to name the generated content. It&amp;rsquo;s a reasonable default, by the way, but we can learn a few things by fighting it for this file.&lt;/p&gt;
-
-&lt;p&gt;One other thing. Take a look at the home page.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ cat public/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;http://localhost:1313/post/theme/&amp;quot;&amp;gt;creating a new theme&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;http://localhost:1313/about-time/&amp;quot;&amp;gt;about&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;http://localhost:1313/post/second-post/&amp;quot;&amp;gt;second&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-    &amp;lt;h1&amp;gt;&amp;lt;a href=&amp;quot;http://localhost:1313/post/first-post/&amp;quot;&amp;gt;first&amp;lt;/a&amp;gt;&amp;lt;/h1&amp;gt;
-&amp;lt;script&amp;gt;document.write(&#39;&amp;lt;script src=&amp;quot;http://&#39;
-        + (location.host || &#39;localhost&#39;).split(&#39;:&#39;)[0]
-    + &#39;:1313/livereload.js?mindelay=10&amp;quot;&amp;gt;&amp;lt;/&#39;
-        + &#39;script&amp;gt;&#39;)&amp;lt;/script&amp;gt;&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Notice that the &amp;ldquo;about&amp;rdquo; link is listed with the posts? That&amp;rsquo;s not desirable, so let&amp;rsquo;s change that first.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/index.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;body&amp;gt;
-  &amp;lt;h1&amp;gt;posts&amp;lt;/h1&amp;gt;
-  {{ range first 10 .Data.Pages }}
-    {{ if eq .Type &amp;quot;post&amp;quot;}}
-      &amp;lt;h2&amp;gt;&amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;&amp;lt;/h2&amp;gt;
-    {{ end }}
-  {{ end }}
-
-  &amp;lt;h1&amp;gt;pages&amp;lt;/h1&amp;gt;
-  {{ range .Data.Pages }}
-    {{ if eq .Type &amp;quot;page&amp;quot; }}
-      &amp;lt;h2&amp;gt;&amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;&amp;lt;/h2&amp;gt;
-    {{ end }}
-  {{ end }}
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-:wq
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Generate the web site and verify the results. The home page has two sections, posts and pages, and each section has the right set of headings and links in it.&lt;/p&gt;
-
-&lt;p&gt;But, that about page still renders to about-time/index.html.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ find public -name &#39;*.html&#39; | xargs ls -l
--rw-rw-r--  1 mdhender  staff    334 Sep 27 15:33 public/about-time/index.html
--rw-rw-r--  1 mdhender  staff    645 Sep 27 15:33 public/index.html
--rw-rw-r--  1 mdhender  staff    358 Sep 27 15:33 public/post/first-post/index.html
--rw-rw-r--  1 mdhender  staff      0 Sep 27 15:33 public/post/index.html
--rw-rw-r--  1 mdhender  staff    342 Sep 27 15:33 public/post/second-post/index.html
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Knowing that hugo is using the slug to generate the file name, the simplest solution is to change the slug. Let&amp;rsquo;s do it the hard way and change the permalink in the configuration file.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi config.toml
-[permalinks]
-  page = &amp;quot;/:title/&amp;quot;
-  about = &amp;quot;/:filename/&amp;quot;
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;p&gt;Generate the web site and verify that this didn&amp;rsquo;t work. Hugo lets &amp;ldquo;slug&amp;rdquo; or &amp;ldquo;URL&amp;rdquo; override the permalinks setting in the configuration file. Go ahead and comment out the slug in content/about.md, then generate the web site to get it to be created in the right place.&lt;/p&gt;
-
-&lt;h2 id=&#34;sharing-templates&#34;&gt;Sharing Templates&lt;/h2&gt;
-
-&lt;p&gt;If you&amp;rsquo;ve been following along, you probably noticed that posts have titles in the browser and the home page doesn&amp;rsquo;t. That&amp;rsquo;s because we didn&amp;rsquo;t put the title in the home page&amp;rsquo;s template (layouts/index.html). That&amp;rsquo;s an easy thing to do, but let&amp;rsquo;s look at a different option.&lt;/p&gt;
-
-&lt;p&gt;We can put the common bits into a shared template that&amp;rsquo;s stored in the themes/zafta/layouts/partials/ directory.&lt;/p&gt;
-
-&lt;h3 id=&#34;create-the-header-and-footer-partials&#34;&gt;Create the Header and Footer Partials&lt;/h3&gt;
-
-&lt;p&gt;In Hugo, a partial is a sugar-coated template. Normally a template reference has a path specified. Partials are different. Hugo searches for them along a TODO defined search path. This makes it easier for end-users to override the theme&amp;rsquo;s presentation.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/partials/header.html
-&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html&amp;gt;
-&amp;lt;head&amp;gt;
-  &amp;lt;title&amp;gt;{{ .Title }}&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-:wq
-
-$ vi themes/zafta/layouts/partials/footer.html
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-:wq
-&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Drengir verða ekki hommar af því að feður þeirra sýndu þeim frávísandi hegðun og mæður þeirra voru afskiptasamar og stjórnsamar í uppeldi.&lt;/p&gt;&lt;/li&gt;
 
-&lt;h3 id=&#34;update-the-home-page-template-to-use-the-partials&#34;&gt;Update the Home Page Template to Use the Partials&lt;/h3&gt;
+&lt;li&gt;&lt;p&gt;Samkynhneigð er eðlileg og finnst víða í náttúrunni (Bagemihl, 1999; Sommer &amp;amp; Vasey, 2006). Það hefur verið sýnt fram á það með tvíburarannsóknum að samkynhneigið er háð erfðum og genum (Mustanski, Chivers, &amp;amp; Bailey, 2002), (Kendler, Thornton, Gilman, &amp;amp; Kessler, 2000) og það hefur meira að segja komið í ljós að erfðir eru stærri orsakavaldur samkynhneigðar heldur en örvhentu (Medland, Duffy, Wright, Geffen, &amp;amp; Martin, 2006).&lt;/p&gt;&lt;/li&gt;
 
-&lt;p&gt;The most noticeable difference between a template call and a partials call is the lack of path:&lt;/p&gt;
+&lt;li&gt;&lt;p&gt;Eftir því sem bræðrum fjölgar aukast líkur á því að samkynhneigð komi fram í yngsta bróðurnum. Líkurnar aukast um 33% við hvern eldri bróður (Blanchard &amp;amp; Bogaert, 1996). Margar kenningar eru uppi um hvers vegna svo sé. Ein þeirra gengur út á það að líkami móðurinnar líti á karlkynsfóstur sem aðskotahlut og framleiði nokkurs konar mótefni til að gera fóstrið kvenlegra. Kenningin gerir enn fremur ráð fyrir að með hverri meðgöngu verði líkami móðurinnar færari í framleiðslunni og mótefnin sterkari (Blanchard, 2008).&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;pre&gt;&lt;code&gt;{{ template &amp;quot;theme/partials/header.html&amp;quot; . }}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Í greininni er fjallað um meðferðir við samkynhneigð sem ganga út á að &amp;ldquo;af-homma&amp;rdquo; einstaklinga. Slíkar meðferðir hafa ekki læknisfræðilegan grunn á bak við sig og verða því að teljast einhvers konar persónuleikasnyrting en ekki læknisfræðilegar meðferðir.&lt;/p&gt;
 
-&lt;p&gt;versus&lt;/p&gt;
+&lt;p&gt;Njótið vel, þetta er allt voða eðlilegt.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;{{ partial &amp;quot;header.html&amp;quot; . }}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Heimildir:&lt;/p&gt;
 
-&lt;p&gt;Both pass in the context.&lt;/p&gt;
+&lt;p&gt;Bagemihl, B. (1999). Biological exuberance : animal homosexuality and natural diversity (1st ed.). New York: St. Martin&amp;rsquo;s Press.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s change the home page template to use these new partials.&lt;/p&gt;
+&lt;p&gt;Bell, A. P., Weinberg, M. S., &amp;amp; Hammersmith, S. K. (1981). Sexual Preference: Its development in men and women. Bloomington: Indiana University Press.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/index.html
-{{ partial &amp;quot;header.html&amp;quot; . }}
+&lt;p&gt;Blanchard, R. (2008). Review and theory of handedness, birth order, and homosexuality in men. Laterality, 13(1), 51-70.&lt;/p&gt;
 
-  &amp;lt;h1&amp;gt;posts&amp;lt;/h1&amp;gt;
-  {{ range first 10 .Data.Pages }}
-    {{ if eq .Type &amp;quot;post&amp;quot;}}
-      &amp;lt;h2&amp;gt;&amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;{{ .Title }}&amp;lt;/a&amp;gt;&amp;lt;/h2&amp;gt;
-    {{ end }}
-  {{ end }}
+&lt;p&gt;Blanchard, R., &amp;amp; Bogaert, A. F. (1996). Homosexuality in men and number of older brothers. American Journal of Psychiatry, 153, 27-31.&lt;/p&gt;
 
-  &amp;lt;h1&amp;gt;pages&amp;lt;/h1&amp;gt;
-  {{ range .Data.Pages }}
-    {{ if or (eq .Type &amp;quot;page&amp;quot;) (eq .Type &amp;quot;about&amp;quot;) }}
-      &amp;lt;h2&amp;gt;&amp;lt;a href=&amp;quot;{{ .Permalink }}&amp;quot;&amp;gt;{{ .Type }} - {{ .Title }} - {{ .RelPermalink }}&amp;lt;/a&amp;gt;&amp;lt;/h2&amp;gt;
-    {{ end }}
-  {{ end }}
+&lt;p&gt;Kendler, K. S., Thornton, L. M., Gilman, S. E., &amp;amp; Kessler, R. C. (2000). Sexual Orientation in a U.S. National Sample of Twin and Nontwin Sibling Pairs. The American Journal of Psychiatry, 157, 1843-1846.&lt;/p&gt;
 
-{{ partial &amp;quot;footer.html&amp;quot; . }}
-:wq
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Medland, S. E., Duffy, D. L., Wright, M. J., Geffen, G. M., &amp;amp; Martin, N. G. (2006). Handedness in twins: joint analysis of data from 35 samples. Twin Res Hum Genet, 9(1), 46-53.&lt;/p&gt;
 
-&lt;p&gt;Generate the web site and verify the results. The title on the home page is now &amp;ldquo;your title here&amp;rdquo;, which comes from the &amp;ldquo;title&amp;rdquo; variable in the config.toml file.&lt;/p&gt;
+&lt;p&gt;Mustanski, B. S., Chivers, M. L., &amp;amp; Bailey, J. M. (2002). A critical review of recent biological research on human sexual orientation. Annual Review of Sex Research, 12, 89-140.&lt;/p&gt;
 
-&lt;h3 id=&#34;update-the-default-single-template-to-use-the-partials&#34;&gt;Update the Default Single Template to Use the Partials&lt;/h3&gt;
+&lt;p&gt;&lt;a href=&#34;http://www.psychologytoday.com/blog/the-sexual-continuum/200901/cartoon-guide-sexual-orientation&#34;&gt;http://www.psychologytoday.com/blog/the-sexual-continuum/200901/cartoon-guide-sexual-orientation&lt;/a&gt;&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/_default/single.html
-{{ partial &amp;quot;header.html&amp;quot; . }}
+&lt;p&gt;Sommer, V., &amp;amp; Vasey, P. L. (2006). Homosexual behaviour in animals : an evolutionary perspective. Cambridge ; New York: Cambridge University Press.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Jákvæðar hugsanir til að „halda út matarkúr“</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/jakvaedarhugsanirmatarkur/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/jakvaedarhugsanirmatarkur/</guid>
+      <description>
 
-  &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  {{ .Content }}
+&lt;p&gt;Hérna eru nokkur ráð til að „halda út matarkúr“ og forðast að falla í freistni. Aðalatriðið er að fara ekki í tímabundinn megrunarkúr. Það er orðið algengt viðmið að borða allan almennan mat, ekki of mikið í einu og helst ávexti eða grænmeti og þá helst lífrænt ræktað sé þess kostur.&lt;/p&gt;
 
-{{ partial &amp;quot;footer.html&amp;quot; . }}
-:wq
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Hugsunin er sú að að leggja áherslu á matarvenjur veiðimannsins og fæðusafnarans en forðast hvítt hveiti, transfitusýrur og sykur. Það skiptir máli að beina sjónum að öðrum hlutum þegar athygli snýst að mat. Að nærast reglulega á tveggja til þriggja tíma fresti en ekki að svelta sig heilu og hálfu dagana og oféta þegar matur er á borðum. Í raun er þetta einfalt reikningsdæmi, þ.e. kaloríur inn og kalóríur út með hreyfingu og viðeigandi brennslu. Forðist jójó áhrif af ístöðulausum kúrum og tali um kúra sem eru í raun aðeins sjálfsblekking. Þetta er ekki spurning um að fara í tímabundinn megrunarkúr, heldur að breyta lífsstílnum til lengri tíma.&lt;/p&gt;
 
-&lt;p&gt;Generate the web site and verify the results. The title on the posts and the about page should both reflect the value in the markdown file.&lt;/p&gt;
+&lt;h3 id=&#34;teldu-þér-trú-um-að&#34;&gt;Teldu þér trú um að:&lt;/h3&gt;
 
-&lt;h2 id=&#34;add-date-published-to-posts&#34;&gt;Add “Date Published” to Posts&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Ég nýt lífsins, þegar ég neita mér um kaloríuríkan mat.&lt;/li&gt;
+&lt;li&gt;Kúr virkar, þegar ég vil láta hann virka og legg mig fram um að breyta lífsháttum mínum.&lt;/li&gt;
+&lt;li&gt;Matur er lyf.&lt;/li&gt;
+&lt;li&gt;Að hafa meiri kraft og heilsu er betri líðan en að finna fyrir magafylli (södd/saddur).&lt;/li&gt;
+&lt;li&gt;Kúr virkar ef ég svík ekki.&lt;/li&gt;
+&lt;li&gt;Ég nýt þess að hafa stjórn á hvatvísi til að borða of mikið. Settu aðeins einu sinni á diskinn.&lt;/li&gt;
+&lt;li&gt;Ég er mögulega þreyttur en ekki svangur. Getur vatnssopi og hvíld látið mér líða betur?&lt;/li&gt;
+&lt;li&gt;Ég er mögulega kvíðin(n), en ekki svöng/svangur. Hvað með að fara út að ganga en ekki fara í ísskápinn?&lt;/li&gt;
+&lt;/ul&gt;
 
-&lt;p&gt;It&amp;rsquo;s common to have posts display the date that they were written or published, so let&amp;rsquo;s add that. The front matter of our posts has a variable named &amp;ldquo;date.&amp;rdquo; It&amp;rsquo;s usually the date the content was created, but let&amp;rsquo;s pretend that&amp;rsquo;s the value we want to display.&lt;/p&gt;
+&lt;h3 id=&#34;forðastu-þessar-goðsagnir&#34;&gt;Forðastu þessar goðsagnir:&lt;/h3&gt;
 
-&lt;h3 id=&#34;add-date-published-to-the-template&#34;&gt;Add “Date Published” to the Template&lt;/h3&gt;
+&lt;p&gt;Það er í lagi að svíkja í þetta sinn. Þetta verður aðeins til að brjóta niður eigin mótstöðuvilja.
+Það er í lagi að vera að verðlauna sig af og til. Það vekur upp æst hormóna villidýr sem öskrar á meiri mat og „kúrinn“ kominn á hættustig.
+Það er betra að taka tíma í að koma kúrnum af stað. Það má alveg setja af stað mjög ögrandi breytingar á mataræði á þremur sólarhringum.
+Ég má borða mig sadda(n).  Við erum alltaf með verulega falska hugmynd um eigin neysluþörf við máltíð. Meðvitað áttum við okkur löngu síðar á því að við vorum orðin södd. Í raun skilur hér á milli þeirra sem halda sér grönnum og þeirra sem eru í yfirvigt, vegna þess að þeir fyrrnefndu borða síður yfir sig af því sem þeim þykir gott.&lt;/p&gt;
 
-&lt;p&gt;We&amp;rsquo;ll start by updating the template used to render the posts. The template code will look like:&lt;/p&gt;
+&lt;p&gt;Heimildir:&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;{{ .Date.Format &amp;quot;Mon, Jan 2, 2006&amp;quot; }}
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Barrett, Deirdre. (2007). Waistland. New York. W.W.Norton &amp;amp; Company.
+Pelusi, Nando. (2008). An Outside Appetite Courtesy of Evolution. Psychology Today. October, bls. 67.
+Pollan, Michael. (2006). The Omnivore´s Dilemma .The Penguin Press.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>ORÐRÓMUR, RÓGUR EÐA ÁRÓÐUR?</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/ordromurrogurarodur/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/ordromurrogurarodur/</guid>
+      <description>
 
-&lt;p&gt;Posts use the default single template, so we&amp;rsquo;ll change that file.&lt;/p&gt;
+&lt;p&gt;Í kreppunni og þeim aðstæðum sem sköpuðust í íslensku samfélagi eftir bankahrunið 2008 hefur orðrómur og rógburður um náungann verið mjög áberandi í samfélaginu. Kreppuaðstæður eru kjöraðstæður fyrir dreifingu orðróma, því oft vantar upplýsingar um menn og málefni og mikil óvissa ríkir í kringum brýn atriði í umræðunni eins og t.d. hvað stjórnvöld eða fjármálastofnanirnar ætli sér að gera í hinum ýmsum málum.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/_default/single.html
-{{ partial &amp;quot;header.html&amp;quot; . }}
+&lt;p&gt;Í tímaritinu Psychology Today í desember 2008 birtist mjög áhugaverð grein um orðróm og flökkusögur (Clark, 2008). Þar sem greinin tók á mörgum þáttum um efnið og var mjög upplýsandi um margt fannst mér tilvalið að endursegja greinina í stuttu máli og bæta við öðru áhugaverðu sálfræði tengdu efni. Ég mun leitast við að staðfæra að þeim orðrómum og umræðum sem hafa verið áberandi á meðal fólks í fjölmiðlum og á netinu síðastliðna mánuði.&lt;/p&gt;
 
-  &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  &amp;lt;h2&amp;gt;{{ .Date.Format &amp;quot;Mon, Jan 2, 2006&amp;quot; }}&amp;lt;/h2&amp;gt;
-  {{ .Content }}
+&lt;p&gt;Orðrómur getur verið mjög særandi og valdið þeim sem fyrir honum verður miklum skaða, ekki síst andlega jafnt og efnislega. Margir þjóðþekktir Íslendingar geta jafnvel vitnað um fréttir af þeirra eigin dauða, en slík reynsla hlýtur óneitanlega að valda hugaróró. Má þar nefna Hemma Gumm, Trausta veðurfréttamann og Pálma Gunnarsson söngvara, en allir hafa þeir þurft að koma fram og fullvissa okkur hin um að þeir séu ennþá sprelllifandi og eiga vonandi að vera það áfram okkur öllum til gleði og ánægju. Gróa á Leiti er myndbirtingur kjaftasögunnar í „Pilti og stúlku” eftir Jón Thoroddsen en þar var hún alræmd slúðurkerling, sem hafði að orðtaki ,,að ólýginn sagði”. Gróa er Íslendingum svo hugleikin að það eru rúmlega 7000 heimasíður á netinu sem vísa til hennar þegar þetta er skrifað í ágúst 2009.&lt;/p&gt;
 
-{{ partial &amp;quot;footer.html&amp;quot; . }}
-:wq
-&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;en-hvað-er-orðrómur&#34;&gt;En hvað er orðrómur?&lt;/h3&gt;
 
-&lt;p&gt;Generate the web site and verify the results. The posts now have the date displayed in them. There&amp;rsquo;s a problem, though. The &amp;ldquo;about&amp;rdquo; page also has the date displayed.&lt;/p&gt;
+&lt;p&gt;Orðrómur er í eðli sínu óstaðfestar upplýsingar sem við dreifum á milli okkar í tilraun til að henda reiður á umhverfinu.&lt;/p&gt;
 
-&lt;p&gt;As usual, there are a couple of ways to make the date display only on posts. We could do an &amp;ldquo;if&amp;rdquo; statement like we did on the home page. Another way would be to create a separate template for posts.&lt;/p&gt;
+&lt;p&gt;Fyrir þá sem vilja skoða meira um orðrómi er bent á heimasíðuna www.snopes.com sem tekur mjög faglega á þeim orðrómum og flökkusögum sem birtast með ýmsum hætti í fjölmiðlum, á heimasíðum á netinu, í netpóstinum okkar eða bara með gamla laginu svona manna á milli. Eitt af heitustu umræðuefnunum á heimasíðunni í byrjun maí 2009 var að plánetan Mars muni verða einstaklega nálægt jörðu næstkomandi ágúst og að þann 27. ágúst muni líta út eins og jörðin hafi tvö tungl. Almennt eru rannsóknir á flökkusögum þjóðfræðilegt verkefni en sálfræðin og þjóðfræðin skara um margt saman einmitt á þessum vettvangi.&lt;/p&gt;
 
-&lt;p&gt;The &amp;ldquo;if&amp;rdquo; solution works for sites that have just a couple of content types. It aligns with the principle of &amp;ldquo;code for today,&amp;rdquo; too.&lt;/p&gt;
+&lt;p&gt;En hver er kjarninn í því ferli þegar orðrómur fer af stað og hvað er það sem sálfræðingar álíta að ali á orðrómi? Í fyrsta lagi byggir orðrómur oft á kvíða og öðrum tilfinningabundnum viðbrögðum. Við sáum það strax í október s.l. að landlæknir þurfti að koma fram í sjónvarpi og hrekja orðróm um að fjöldi manns hefði framið sjálfsmorð vegna bankahrunsins. Af hverju spretta svona sögur upp? Ótti er oft afgerandi þáttur í því að orðrómur fari af stað. Ef óttinn er sameiginlegt fyrirbæri, þ.e.a.s. ef stór hluti samfélagsins deilir þessum ótta þá verður farvegurinn fyrir orðróminn sterkari. Það felst ákveðin spennulosun í því að ræða um aðstæður og deila upplýsingum, jafnvel þótt upplýsingarnar séu óstaðfestar og þar með mögulega ósannar. Það gefur einstaklingnum þá tilfinningu að hann hafi stjórn á aðstæðum því þetta er leið viðkomandi til þess að átta sig á staðreyndum og geta undirbúið sig undir mögulegar ógnanir. Flestir slíkir orðrómar sem þannig myndast eru neikvæðir. Nú í byrjun maí 2009 voru t.d. áberandi orðrómar um ónýtar skuldir í bönkunum og talað um að það þurfi að afskrifa allt að 90% af útistandandi skuldum bankanna. Út frá sjónarhorni þróunarsálfræðinnar má segja að það sé mannskepnunni að vissu leyti nauðsynlegt að einblína svona á neikvæðar fréttir. Það skiptir okkur meira máli að geta séð fyrir um vont veður en að einblína á hvað sé fallegt til útivistar.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s assume, though, that we&amp;rsquo;ve made our site so complex that we feel we have to create a new template type. In Hugo-speak, we&amp;rsquo;re going to create a section template.&lt;/p&gt;
+&lt;p&gt;Orðrómur getur orðið mjög sterkur ef málefnið vekur upp miklar tilfinningar. Má þar nefna þegar hundurinn Lúkas hvarf á Akureyri og ungum manni var kennt um að hafa deytt hundinn og kvalið. Upp úr því varð mikill farsi, sérstaklega á netinu. Fólk hefur gjarnan miklar tilfinningar gagnvart dýrum og börnum og öðrum varnarlausum aðilum. Samkennd myndast þess vegna mjög hratt þegar fólk heyrir um óréttláta eða ósiðlega hegðun gagnvart málleysingjum, eins og gerðist með hundinn Lúkas.&lt;/p&gt;
 
-&lt;p&gt;Let&amp;rsquo;s restore the default single template before we forget.&lt;/p&gt;
+&lt;p&gt;Orðrómur helst lengur ef hann kemur okkur á óvart en fellur samt að ranghugmyndum okkar eða staðalmyndum um aðra.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ mkdir themes/zafta/layouts/post
-$ vi themes/zafta/layouts/_default/single.html
-{{ partial &amp;quot;header.html&amp;quot; . }}
+&lt;p&gt;Síendurtekin eða keimlík áreiti kalla fram einhæf viðbrögð og hegðun sem að hluta verður sjálfvirk. Í byrjun október 2008 sagðist Gordon Brown hafa upplýsingar um að miklar fjárhæðir hefðu verið fluttar frá Bretlandi til Íslands og notaði það sem réttlætingu fyrir því að ráðast á litla Ísland. Þessa dagana er einmitt verið að ganga frá bráðabirgða uppgjöri fyrir þann banka sem ráðist var á og það er talið að kröfuhafar fái yfir 80% sínum kröfum, sem er einstaklega mikið í bankahruni. Mismunurinn sem á vantar verður væntanlega svipuð upphæð og bústjórar bankans munu þiggja við að gera bankann upp. Það hefur aldrei komið neitt fram um peningatilfærslur til Íslands enn sem komið er. Það má samt búast við því að vel yfir 90% Breta trúi því enn að fullyrðing Gordon Brown hafi verið rétt. Það má sömuleiðis búast við því að stór hluti Íslendinga trúi þessarri fabúleringu Gordons Brown. Það má einnig búast við því að yfir helmingur Hollendinga trúi því ennþá að Icesave inneignirnar hafi verið notað til að kaupa Stork í Hollandi, þótt þessu hafi verið staðfastlega afneitað af Marel og skilgeint hvernig fjármögnun á yfirtöku Stork var háttað. Það var einmitt mikið um slíkan orðróm í hollenskum blöðum á tímabili í vetur. Það trúa því sennilega einhverjir ennþá að það finnist eyðileggingarvopn í Írak.&lt;/p&gt;
 
-  &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  {{ .Content }}
+&lt;p&gt;Við útbreiðslu orðróms hefur auðtrúa fólk meiri áhrif en valdamikið fólk.&lt;/p&gt;
 
-{{ partial &amp;quot;footer.html&amp;quot; . }}
-:wq
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Börn og unglingar geta breitt út orðróm alveg ótrúlega hratt. Má þar nefna að skólar eru fjölmennir og samgangur er mjög mikill, þannig að jarðvegurinn er ákaflega frjór fyrir öra útbreiðslu orðróms. Börn hafa ekki alltaf tök á því að staðfesta hvort orðrómur sé sannur eða ekki og treysta sögumanni, enda er yfirleitt um vin að ræða.&lt;/p&gt;
 
-&lt;p&gt;Now we&amp;rsquo;ll update the post&amp;rsquo;s version of the single template. If you remember Hugo&amp;rsquo;s rules, the template engine will use this version over the default.&lt;/p&gt;
+&lt;p&gt;Því oftar sem við heyrum orðróm, því sannari finnst okkur hann vera, þrátt fyrir að heimildagildið sé vafasamt. Hér á Íslandi höfum við séð hvernig fréttastofur og fjölmiðlar hafa verið notaðir í áróðursskyni til að bera út orðróm og halda honum við þar sem einn fjölmiðill vísar í annan. Það gerir orðróminn ekki sannan heldur viðheldur honum með því að gefa honum falskt sannleiksyfirbragð. Fréttastofurnar virðast vera í sömu aðstöðu og börnin á skólalóðinni. Svo virðist sem þær eigi erfitt með að greina á milli góðra og slæmra heimilda. Ýmsar fullyrðingar hafa verið settar fram í fjölmiðlum af hagsmunaaðilum og í stað þess að sannreyna gildi þeirra hafa fréttastofurnar hreinlega birt þær því sem næst óritskoðaðar.&lt;/p&gt;
 
-&lt;pre&gt;&lt;code&gt;$ vi themes/zafta/layouts/post/single.html
-{{ partial &amp;quot;header.html&amp;quot; . }}
+&lt;p&gt;Við erum fús til að trúa slæmum orðrómum um þekkta einstaklinga og þá sem við öfundum.  Ég held að það þurfi ekki að taka til dæmi úr umræðunni um útrásarvíkingana, bankamennina eða stjórnmálamennina síðasta vetur, en líklega hefur sú umræða aldrei verið jafn mikil og neikvæð eins og núna. Þetta má glöggt sjá á þjóðarpúlsi Gallup sem var birtur um mánaðarmótin apríl/maí 2009, þar sem 78% þjóðarinnar telur atvinnulífið spillt, 71% telur að stjórnmálin séu spillt og rúmlega helmingur telur að fréttastofur fjölmiðlanna séu varhugaverðar. Þekktir einstaklingar og áhrifamiklir eru auðveld skotmörk fyrir gróusögur. Oft haldast sögurnar svipaðar en fólkið kemur og fer, þ.e.a.s. sömu sögurnar eru sagðar um ólíka einstaklinga. Þegar einstaklingur nær ákveðnum frægðarmörkum virðist fara af stað alsjálfvirkt ferli. Þess frægar sem fólk verður, þeim mun meiri verður óhugnaðurinn eða vitleysan í orðrómunum. Það sem einkennir orðróm um þá frægu er að orðrómurinn ferðast víða og festist vel. Hluti af því er einföld öfundssýki og/eða minnimáttarkennd og jafnvel óskhyggja. Karlmönnum líður t.d. betur við að heyra getgátur um að frægur og myndarlegur leikari sé hommi og dreifa slíkum sögum sem víðast því þeir þurfa þá ekki að keppa við hann um hylli kvenþjóðarinnar. Einstaklingar dreifa sem sagt gjarnan orðrómum sem þeir finna samhljóm með og eru um efni sem er þeim hugleikið, orðrómum sem fela í sér eitthvað sem einstaklingarnr eru sammála eða vonast til að&lt;/p&gt;
 
-  &amp;lt;h1&amp;gt;{{ .Title }}&amp;lt;/h1&amp;gt;
-  &amp;lt;h2&amp;gt;{{ .Date.Format &amp;quot;Mon, Jan 2, 2006&amp;quot; }}&amp;lt;/h2&amp;gt;
-  {{ .Content }}
+&lt;p&gt;Orðrómar endurspegla tíðarandann. Hverjum stórviðburði í samfélaginu fylgir ný hrina af orðrómum. Orðrómar hafa meiri líkur til að dreifast ef þeir fjalla um eitthvað sem er ofarlega á baugi hverju sinni. Um kosningar fara sem dæmi af stað ógrynni frétta. Sumt virðist einstaklega óheppilegt eins og orðrómar og fréttir af styrkjum til stjórnmálaflokka og einstakra frambjóðenda. Slíkir orðrómar eru svo yfirleitt í rénum á milli kosninga, þ.e. þegar kosningamál eru ekki í fréttum og ekki í umræðunni finna orðrómar um kosningamál sér síður farveg.&lt;/p&gt;
 
-{{ partial &amp;quot;footer.html&amp;quot; . }}
-:wq
+&lt;p&gt;Einfaldur og nákvæmur orðrómur lifir lengur. Sú ranghugmynd að kinverski múrinn sé sjáanlegur utan úr geimi er eitt af því sem lifir og lifir á meðal fólks, þrátt fyrir að vera ekki satt. Það að Davíð Oddson hafi verið valdur að kreppunni, jafnvel aðalskaðvaldurinn á heimsvísu, er mjög mikil einföldun sem hefur verið haldið uppi frá öllum köntum, en auðvitað var dæmið allt miklu stærra og litla Ísland er alls ekki sá áhrifavaldur sem margir vilja meina. Flökkusögur lifa lengur ef þær hafa mjög grafískar lýsingar því minni okkar er mjög sjónrænt. Minni okkar er sömuleiðis gírað til þess að muna betur raunverulega hluti heldur en afstæð hugtök eins og sannleikur eða réttlæti. Davíð Oddson hefur mjög sterka ímynd í huga Íslendinga og því verður orðrómurinn um hann þess sterkari. Enda virtist sá orðrómur deyja út eftir að Davíð hætti í Seðlabankanum. Síðar skrifaði einhver maður heila bók um málið til þess að sannfæra sjálfan sig og aðra um að það væri satt (Ólafur Arnarson, 2009).&lt;/p&gt;
 
-&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Hjátrú eykur mjög á allan orðróm. Það er ríkt í mannlegu eðli að vilja að umhverfi sitt sé öruggt og að hægt sé að ganga að umhverfinu vísu. Hjátrú er tilraun mannskepnunnar til þess að hafa stjórn á umhverfinu og óræðum atvikum í lífi sínu. Einstaklingar reyna að gefa atburðum merkingu og búa til auka orsakatengingar sem eru ekki raunverulegar. Íþróttamenn eru til dæmis þekktir fyrir að keppa í ákveðnum happaflíkum, þ.e. flíkum sem þeir voru í síðast þegar þeir sigruðu, því þeir telja þær færa sér auknar líkur á sigri, eða undirbúa sig alltaf á sama hátt og þeir gerðu eitthvert skiptið sem mjög vel gekk í keppnisleik. Sömuleiðis er algengt að nemendur taki happahlut með sér í próf í von um að þeim gangi þá betur í prófinu. Hjátrú byggir oft á orðrómi og orðrómur á hjátrú. Íslendingar eru þekktir fyrir hjátrú á álfa og tröll, en Bandaríkjamenn á geimverur og súpermenn. Bretar halda að BBC sé áreiðanlegur fjölmiðill, en við Íslendingar höfum fundið fyrir öðru þegar á reynir: það eru allir samir við sig þegar hagsmunirnir fara á flot, BBC er ekki þar undanskilið.&lt;/p&gt;
 
-&lt;p&gt;Note that we removed the date logic from the default template and put it in the post template. Generate the web site and verify the results. Posts have dates and the about page doesn&amp;rsquo;t.&lt;/p&gt;
+&lt;p&gt;Orðrómar sem endast lengst eru þeir sem erfitt er að afneita. Ótrúlegustu sögur geta verið mjög lífseigar, eins og draugasögur. Hvernig getum við verið örugg á því að draugar séu ekki til? Það er í raun ekki hægt að afneita hugmyndinni alveg. Alveg eins og það verður aldrei hægt að afneita eða sanna að fullu hvort Glitnisleiðin hafi sett af stað hrunið. Breskir hagfræðingar hnussuðu og sveiuðu en viku síðar gerðu þeir nákvæmlega það sama í Bretlandi og þar næst í Bandaríkjunum. Öll umræðan um það hvort Glitnir hefði átt að þjóðnýta eða ekki er bundin hagsmunum og er því þegar farin að taka mynd áróðurs. Þess vegna verður seint hægt að afneita eða sanna eitt eða neitt um það hvort þjóðnýting Glitnis hafi sett allt hrunið af stað eður ei.&lt;/p&gt;
 
-&lt;h3 id=&#34;don-t-repeat-yourself&#34;&gt;Don&amp;rsquo;t Repeat Yourself&lt;/h3&gt;
+&lt;p&gt;Orðrómur getur verið ein leið fólks að mynda tengingar og tilraun til þess að skapa eigið tungumál og þar með hópkennd. Nýtt tungumál eða slangur er einmitt eitt einkenni í hópamyndun (Schein, 1994). „Helvítis fokking fokk“ er gott dæmi um tungutak sem myndast í hópi og heldur hópnum saman. Aðilar sem tala illa um aðra eru að leitast eftir því að auka félagsleg tengsl sín á milli með því að gefa í skyn að þeir vilji ekki hópatengsl við aðra (Schein, 1994). Stundum virðist engin sjáanleg ástæða fyrir því hvers vegna orðrómur dreifist. Og það getur komið á daginn að engin sjáanleg ástæða finnist önnur en sú að orðrómurinn auki félagsleg tengsl þeirra sem dreifa honum.&lt;/p&gt;
 
-&lt;p&gt;DRY is a good design goal and Hugo does a great job supporting it. Part of the art of a good template is knowing when to add a new template and when to update an existing one. While you&amp;rsquo;re figuring that out, accept that you&amp;rsquo;ll be doing some refactoring. Hugo makes that easy and fast, so it&amp;rsquo;s okay to delay splitting up a template.&lt;/p&gt;
+&lt;h3 id=&#34;orðrómur-eða-áróður&#34;&gt;Orðrómur eða áróður?&lt;/h3&gt;
+
+&lt;p&gt;Áróður er skilgreindur sem:&lt;/p&gt;
+
+&lt;p&gt;„&amp;hellip;úthugsuð og kerfisbundin tilraun til þess að móta skynjun, stjórna hugsun og hafa áhrif á hegðun til að fá fram viðbrögð sér í hag“. (Jowett &amp;amp; O’Donnell, 1999)&lt;/p&gt;
+
+&lt;p&gt;Áróður sem slíkur getur verið siðferðislega góður eða slæmur. Það er ekki aðalatriðið. Það sem skiptir máli er í hvaða samhengi mögulegur áróður er settur fram. Mismunur á áróðri og orðrómi byggir sem sagt á því að einstaklingurinn hafi hagsmuni af því að bera orðróminn út og sé því um leið orðinn þátttakandi af áróðursherferð (Perloff, 2003).&lt;/p&gt;
+
+&lt;p&gt;Orðrómur sem fjölmæli eða ærumeiðingar er eitthvað sem skiptir fólk miklu máli. Ókvæðisorð eins og það að vera kallaður „ragur“ vörðuðu við skóggang og mátti vega menn fyrir á þjóðveldistímanum (Gunnar Thoroddsen, 1967). Glatað mannorð verður seint endurheimt. Hvort fjölmiðlaumfjöllunin undanfarna mánuði hefur verið hlaðið ærumeiðingum á einstaka menn er ekki á færi sálfræðinnar heldur lögfræðinnar og því er ekki fjallað um þann þátt frekar hér.&lt;/p&gt;
+
+&lt;p&gt;Óskhyggja eða orðrómur? Hvenær eru viðskiptafréttir orðrómur, fjölmæli eða greiningar, eins og sumt var látið heita ? Í fréttum sjónvarpsins taldi Elín Hirst upp greiningar frá mörgum aðilum um það að íslensku bankarnir væri gjaldþrota, en þessar greiningar komu m.a. frá RBS (þjóðnýttur), Merryl Lynch (yfirtekinn), Lehman Brothers (gjaldþrota), Danske Bank (banki sem hefur verið að berjast við gjaldþrot í nokkurn tíma) og svo framvegis. Var það mögulega hagur þessa fjármálastofnana að illa færi fyrir íslensku bönkunum? Var með öðrum orðum mögulegt að samkeppnishagsmunir réðu greiningunni en ekki fagleg hlutlægni? Staða þessara aðila var sennilega mun, mun verri en íslensku bankanna þegar upp var staðið.  Það er ljóst að fréttamennska fjölmiðla hér á Íslandi á mjög erfitt með að setja heimildir í samhengi við hagsmunaaðila og þannig skilja á milli orðróms, óskhyggju, áróðurs og frétta. Að mínu mati hefur margur fréttahaukurinn farið hált á því svellinu í hundraðatali s.l. misseri.&lt;/p&gt;
+
+&lt;p&gt;Falskar játningar. Það sem er einkennilegast er að þegar einstaklingur heyrir fullyrðingu um að orðrómur sé alrangur getur það leitt til þess að viðkomandi muni hana sem sannleik vegna þess hve kunnuglega hann virkar. Rannsóknir Elísabetar Loftus sýndu fram á slíkar falskar minningar (Gleitman, Fridlund og Reisberg, 1999). Enn fremur hafa rannsóknir Gísla Guðjónssonar sýnt að einstaklingar undir álagi geta átt það til að taka á sig sök sem þeir eiga alls ekki (Guðjónsson og Haward, 1998). Þetta gæti mögulega skýrt viðbrögð íslenskra ráðamanna við Icesave samningnum. Sektarkennd og mikið álag virðist fara saman í þeirra huga. Þannig virðist samningurinn byggjast á því að íslenska þjóðin er að taka á sig gífurlegar byrðar vegna þess að ráðamenn fallast á mögulega falskar ásakanir Breta, Hollendinga og Evrópusambandsins. Hugsanlega hafa ráðamennirnir hlustað of oft á alhæfingar um að sökin liggi hjá þeim, en einnig er mögulegt að það falli að hugarheimi ráðamanna á Íslandi að sökin sé þeirra sem þá voru við völd og það henti þeirra stjórnmálalegum hugmyndaheimi að forðast það að taka ábyrgð á orðnum hlut. Á meðal þeirra áróðursaðferða sem íslenska þjóðin hefur verið beitt í þessum efnum er niðurlæging, svipað því sem kom fram í grein Anne Siebert á heimasíðunni www.voxeu.org  þar sem hún reynir ítrekað að gera lítið úr íslensku þjóðinni, t.d. með því að halda því fram að Íslendingar hefðu ekki hæfileikafólk til að reka banka vegna fámennis og notar fjölhæfni landsmanna sem (gallaða) rökfærslu fyrir því að sérþekking þeirra sé ekki nægileg án þess að vísa í neinar sálfræðilegar eða félagsfræðilegar rannsóknir þessu til stuðning.&lt;/p&gt;
+
+&lt;h3 id=&#34;hvað-er-hægt-að-gera-þegar-orðrómur-beinist-að-þér&#34;&gt;Hvað er hægt að gera þegar orðrómur beinist að þér?&lt;/h3&gt;
+
+&lt;p&gt;Í greininni í Psychology Today sem vísað var til hér að ofan eru tekin saman nokkur atriði sem er gott að hafa í huga fyrir þá sem lenda í því að orðróminum og kastljósinu er skyndilega beint að þeim.&lt;/p&gt;
+
+&lt;p&gt;Eins og hér hefur komið fram er minni okkar svo takmarkað að okkur getur minnt að orðrómur sé sannur þótt okkur hafi verið sagt að hann sé rangur. Rannsóknir á þessu hafa einkum beinst að því hvernig minnið virkar og segja því lítið um hvernig best er að hrekja orðróma. Hér verða þó settar fram nokkrar ábendingar:&lt;/p&gt;
+
+&lt;p&gt;Ekki ljúga. Ef orðrómur er sannur skaltu ekki reyna að afneita honum. Ef fólk hefur áhuga á málinu munu staðreyndirnar koma í ljós. Má vísa hér til mála Árna Johnsen, en falskar frávísanir hans blésu málið upp í mun stærra mál en það var í raun og veru í upphafi.&lt;/p&gt;
+
+&lt;p&gt;Vísaðu afdráttarlaust frá röngum orðróm. Stundum geta slík mótmæli átt erfitt uppdráttar og mögulega situr enn eftir vafi í huga fólks, en vel gerð afvísun hefur alltaf betri áhrif en engin afvísun. Afvísun hjálpar fólki að ýta orðrómi frá sér. Afvísun Kjartans Gunnarssonar, fyrrverandi framkvæmdarstjóra Sjálfstæðisflokksins, á því að hafa ekki vitað af styrkjum Landsbankans og FL Group til Sjálfstæðisflokksins var ekki sérlega afgerandi og skilur enn eftir vafa í hugum margra varðandi hvað hann vissi mikið og hvenær og hver hans hlutur í málinu var.&lt;/p&gt;
+
+&lt;p&gt;Fáðu trúverðugan og hlutlausan talsmann til þess að vísa frá orðrómnum. Það má spyrja sig hvort það hafi verið alveg nógu hlutlaust hjá Geir Haarde að ráða til sín blaðafulltrúa frá FL Group.&lt;/p&gt;
+
+&lt;p&gt;Frávísun þarf að vera nákvæm og kjarnorð. Þess nákvæmari og ákveðnari sem málflutningurinn er, þeim mun líklegra er að þér sé trúað og að munað verði eftir frávísuninni.&lt;/p&gt;
+
+&lt;p&gt;Gefðu upp samhengið í því sem er verið að mótmæla. Þegar landlæknir kom t.d. fram í sjónvarpinu í október s.l. og vísaði til orðróms sem hann hafði heyrt um að fólk væri að fremja sjálfsmorð í tugavís greindi hann frá því að hann hafði rannsakað málið og að orðrómurinn væri rangur. Þetta setti málið í samhengi og var skýrt og orðrómurinn virtist alveg detta niður dauður.&lt;/p&gt;
+
+&lt;p&gt;Leitaðu til fagaðila sem geta aðstoðað þig við að meta orðróminn og ráðlagt þér um hvernig bregðast skuli við. Fjölmiðlaráðgjafar og aðrir fagmenn geta t.d. leiðbeint fólki og fyrirtækjum að takast á við orðróm, áróður eða rógburð.&lt;/p&gt;
+
+&lt;p&gt;Leitaðu til fagfólks eins og sálfræðinga til að skilja hvað orðrómurinn gerir þér sjálfum og hvernig þú ert sjálfur að bregðast við. Fáðu þannig sálfræðilega aðstoð við að læra og skilja hvað það er í hegðun þinni sem veldur slíkum orðrómi og hvernig hægt sé að bregðast betur við.&lt;/p&gt;
+
+&lt;p&gt;Leitaðu þér lögfræðilegrar aðstoðar ef orðrómurinn er áróður, jafnvel rógur og getur verið þér mannorðsskemmandi.&lt;/p&gt;
+
+&lt;p&gt;Það er mjög eðlilegt að halda góðum samskiptum við fjölmiðla að öðru leyti og láta ekki fjaðrafok verða að hænu. Gott er að venja sig á að svara með kurteisi og ákveðni og láta ekki endilega uppiskátt hver séu væntanleg skref í málinu. Best er að forðast umsagnir um aðra aðila í leiðinni því það getur magnað upp umræðuna, búið til nýjan flöt á henni sem ekki var til staðar áður og kallað fram nýjar yfirlýsingar frá öðrum.&lt;/p&gt;
+
+&lt;p&gt;Það er von mín að þessi samantekt geti varpað mynd á það flókna samspil áróðurs og annarrar umræðu sem hefur farið fram í þjóðfélaginu síðustu mánuðina.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Starfsendurhæfing: Hvað geta rannsóknir í íþróttasálfræði kennt okkur?</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/starfsendurhaefing/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/starfsendurhaefing/</guid>
+      <description>&lt;p&gt;Starfsendurhæfing gengur almennt út á að hjálpa þeim sem missa vinnu eða eiga erfitt með að fá vinnu sökum sjúkdóma, slysa, örorku eða félagslegra aðstæðna að komast aftur út á vinnumarkaðinn og taka virkan þátt í samfélaginu. Endurhæfingin getur falist í námi eða starfsþjálfun  og öllum úrræðum er beitt til að auka lífsgæði og endurnýja starfsþrek þeirra.&lt;/p&gt;
+
+&lt;p&gt;Þegar afreksíþróttafólk meiðist illa í slysum tekur endurhæfingarferli við og íþróttafólkið getur þurft að hverfa frá þjálfun á sinni íþrótt til lengri tíma. Íþróttasálfræðingurinn Urban Johnson frá Svíþjóð hefur rannsakað hvaða þættir geta haft neikvæð áhrif á slíkar endurhæfingar. Hann greindi frá niðurstöðum sínum á alþjóðlegri ráðstefnu um íþróttasálfræði sem haldin var við Háskólann í Reykjavík þann 30. júní 2010.&lt;/p&gt;
+
+&lt;p&gt;Á meðal þeirra atriða sem hafa neikvæð áhrif á endurhæfinguna eru lágt sjálfsmat, þrýstingur frá samfélaginu, skortur á hvatningu, ótti um það sem er framundan, einbeitingarskortur, ekki er hlustað á þjálfara og endurhæfingaraðila, hroki, áhrif vegna erfiðra breytinga á lífsstíl, áfengismisnotkun eða önnur fíknhegðun. Ekki má gleyma þunglyndi, óvissu um eðli endurhæfingarinnar, einangrun frá félögum og afneitun á aðstæðum eins og þær eru. Sérstaklega var þó tekið fram að ef félagslegur stuðningur er að skornum skammti getur það hamlað framförum í endurhæfingunni.&lt;/p&gt;
+
+&lt;p&gt;Það getur vel hugsast að endurhæfing afreksíþróttafólks eigi margt sameiginlegt með starfsendurhæfingu. Ráðgjafar á sviði starfsendurhæfingar eru kannski að kljást við þessi sömu atriði í störfum sínum. Ef svo er, þá er ekki öll von úti, því Urban Johnson mælti líka með nokkrum meðferðaleiðum við endurhæfinguna.&lt;/p&gt;
+
+&lt;p&gt;•    Endurmeta markmiðin í lífinu.
+•    Forðast að persónugerva aðstæður.
+    o    Þótt ég missi starf er ég ekki endilega liðleskja eða lélegur einstaklingur.
+•    Halda uppi virku félagslegu sambandi við fólk.
+•    Virkja betur samskiptahæfni.
+•    Afla sér upplýsinga um stöðu sína og endurhæfingu.
+•    Skoða ný tækifæri og áskoranir.
+•    Vera opinn fyrir endurhæfingunni.
+•    Sækja í félagslegan stuðning og alla mögulega aðstoð.
+•    Halda sér að endurhæfingunni. Ekki skrópa eða svíkjast undan.&lt;br /&gt;
+•    Takast meðvitað á við breytingarnar sem fylgja því að tilheyra ekki lengur starfinu sem persónuímyndin var skilgreind út frá.
+•    Stimpla sig ekki sem atvinnulausa(n) til framtíðar og forðast að skilgreina sig út frá atvinnuleysinu eða telja sig vonlausa(n).
+•    Skoða ný áhugamál eða endurvekja gömul áhugamál sem hafa mögulega setið á hakanum.
+•    Leita til sjálfshjálparhópa ef þeir eru til staðar.&lt;/p&gt;
+
+&lt;p&gt;Þeir sem lenda í stóru áfalli og glíma við áfallaröskun geta sömuleiðis tileinkað sér þennan lista til að draga úr hættunni á því að leiðast út í neikvæða hegðun í aðlögunarferlinu.&lt;/p&gt;
+
+&lt;p&gt;Gagnvart starfsendurhæfingu má bæta því við að hópmeðferðir geta verið afar árangursríkar. Margir finna fyrir gífurlegum stuðningi við það að hitta aðra sem eru að ganga í gegnum svipaðar aðstæður, og andrúmsloftið verður skilningsríkt í hvert sinn sem hópurinn kemur saman. Í hópmeðferðum er hægt að taka markvisst fyrir þau atriði sem talinn eru hér að ofan og vinna gegn  neikvæðum áhrifum þeirra, t.d. með þjálfun í að takast á við afneitun eða reiðstjórnun. Það er ódýr valkostur og á margan hátt hnitmiðaðri, þar sem dagskráin er skipulagðari og námskeiðaformið er notað að hluta til þess að skýra hluti og upplýsa viðkomandi aðila um þau atriði sem skipta miklu máli í starfsendurhæfingunni eins og t.d. reiðistjórnun, kvíðastjórnun, markmiðasetning, sjálfstraust og félagsleg samskipti.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SÓLSKINIÐ GERIR OKKUR KÆRULAUS, EN BIRTUSKORTUR EYKUR NEYSLUÞÖRFINA</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/solskinidkaerulaus/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/solskinidkaerulaus/</guid>
+      <description>&lt;p&gt;Það er full ástæða til að fylgjast vel með veðurspánni, því veðurfarið hefur áhrif á líðan okkar og þar með hvernig við hegðum okkur.
+Sólskinið gerir okkur viðmótsþýðari og viljugari til að þóknast öðrum. Á sólríkum dögum, hvort sem kalt sé í veðri eða ekki, erum við líklegri til að svara spurningum frá spyrlum og erum örlátari á þjórfé. Fólk er jafnvel rausnarlegra í gluggalausum hótelherbergjum ef þeim er sagt að&lt;/p&gt;
+
+&lt;p&gt;úti sé sól heldur en ef þeim er sagt að úti sé skýjað veður. Fallegir dagar gera okkur skapbetri, sem kallar fram hjálpsemi og örlæti. Þegar við erum í góðu skapi, viljum við halda því tempói.&lt;/p&gt;
+
+&lt;p&gt;Veðrið hefur meira að segja áhrif á háskólaumsóknir og það hvaða umsækjendur eru samþykktir inn. Umsækjendur sem eru hæfir í námið eru líklegri til að vera samþykktir á skýjuðum dögum, en umsækjendur sem eru félagslega virkir eru frekar samþykktir á sólríkum dögum. Skýjaðir dagar kalla fram hugmyndina um að halda sér innan dyra við að lesa eða að læra. Rannsóknir hafa sýnt að ef spáð er skýjuðu veðri hvetur það fólk til að hugsa um lærdóm.&lt;/p&gt;
+
+&lt;p&gt;Sólskinið hefur líka áhrif á hlutabréfamarkaðina, en þeir eru þrisvar sinnum líklegri til að fara upp á við í sólskini. Fjárfestar eru glaðari á sólríkum dögum og tengja það ranglega við möguleika á góðu gengi á hlutabréfum. Þetta hefur verið kallað geislabaugsáhrif og á við þegar einstaklingar fyllast almennri bjartsýni. Það er spurning hvort hér sé komin skýring á íslenska fjármálaæðinu.&lt;/p&gt;
+
+&lt;p&gt;Rannsóknir hafa sýnt að meira er keypt af lottómiðum á þungskýjuðum dögum. Ástæðan er ekki sú að kaupendurnir séu að reyna að koma sér í betra skap. Slæmt veðurfar dregur úr sjálfsstjórn okkar og verður til þess að við föllum frekar fyrir freistingum.&lt;/p&gt;
+
+&lt;p&gt;Við reynum að bæta okkur upp birtuskortinn á sólarlitlum dögum með aukinni neyslu, hvort sem er á áfengi, kaffi, tóbaki eða súkkulaði.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>TILFINNINGASMIT: SENDIR ÞÚ ÓSKÝR SKILABOÐ?</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/tilfinningasmit/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/tilfinningasmit/</guid>
+      <description>&lt;p&gt;Það er ekki auðvelt að skilja sjálfa(n) sig og enn erfiðara að skilja aðra. Til þess að átta sig á því af hverju það er svo flókið að skilja sig og aðra getur verið gott að greina á milli eftirfarandi atriða (Gosling, 2009).&lt;/p&gt;
+
+&lt;p&gt;Í fyrsta lagi búum við yfir eiginleikum sem við vitum af og aðrir taka auðveldlega eftir. Það að vera hjálpsamur, íhaldssamur, stjórnsamur eða opinn er eitthvað sem dylst yfirleitt ekki. Hvorki okkur né öðrum.&lt;/p&gt;
+
+&lt;p&gt;Í öðru lagi búum við yfir eiginleikum sem við gerum okkur ekki grein fyrir og aðrir eiga erfitt með að greina. Þetta eru eiginleika á borð við að vera næmur fyrir hrósi eða hafa mikla þörf fyrir ástúð. Slíkir mannlegir hvatar hafa oft verið fyrirlitnir í ýmsum menningarheimum og jafnvel forboðnir í trúarlegum tilgangi. Slíkt getur orðið til þess að einstaklingurinn geri sitt ítrasta til að afneita slíkum eiginleikum í sínu eigin fari.&lt;/p&gt;
+
+&lt;p&gt;Í þriðja lagi búum við yfir eiginleikum sem við gerum okkur grein fyrir en viljum ef til vill gera sem minnst úr, eins og feimni eða vanlíðan í margmenni og/eða við ákveðnar aðstæður. Þannig verður sá eiginleiki öðrum hulinn og jafnvel þeir nánustu gera sér ekki grein fyrir kvíða og vanlíðan sem viðkomandi einstaklingur ber í brjósti.&lt;/p&gt;
+
+&lt;p&gt;Að lokum búum við yfir eiginleikum sem eru öðrum ljósir en einstaklingurinn er sjálfur ekki eins næmur á eins og til dæmis að hafa mikið aðdráttarafl, hafa sterka varnarhætti eða hafa getu og gáfur sem aðrir öfunda viðkomandi af en sá hinn sami gerir sér ekki grein fyrir að búa yfir.&lt;/p&gt;
+
+&lt;p&gt;Til þess að átta sig betur á þessu er gott að hafa í huga að uppeldi og umhverfi getur ýkt viðbrögð okkar mjög mikið. Þannig getur einstaklingur sem hefur gengið í gegnum mikla höfnun á unga aldri t.d. eins og gerist gjarnan við skilnað foreldra, flutninga á milli staða eða dauðsföll orðið mjög viðkvæmur fyrir höfnun. Ef upp koma aðstæður síðar í lífi viðkomandi geta ofangreindir þættir snögglega orðið mjög ýktir í fari hans/hennar.&lt;/p&gt;
+
+&lt;p&gt;Einnig eru margir af ofangreindum þáttum félagslega smitandi. Kvíðinn einstaklingur getur haft mjög kvíðvænleg áhrif á sitt nánasta umhverfi og þannig er kvíði snögglega orðinn viðvarandi ástand t.d. innan fjölskyldunnar, á milli samstarfsmanna á vinnustað eða í skólastofunni.&lt;/p&gt;
+
+&lt;p&gt;Hvers kyns áföll, lítil jafnt sem stór, eða kvíðvænleg verkefni geta síðan aukið enn frekar á tilfinningasúpuna og sett allt á yfirsnúning. Í stað þess að takast á við orsakir samskiptavandans einblína allir á útkomuna og enginn gerir sér grein fyrir því hvernig kvíðinn læddist inn í samskiptin til að byrja með og hvers vegna hann varð að svo ríkjandi þætti í líðan allra. Kvíðinn er bara kominn til að vera og allir eru komnir á kvíðafyllerí. Eftir því sem kvíðinn og stressið eykst verður erfiðara að greina skóginn fyrir trjánum og einstaklingar eiga erfiðara með að sjá mögulegar lausnir á hvers kyns vandamálum sem liggja fyrir í samskiptunum.&lt;/p&gt;
+
+&lt;p&gt;Það sem skiptir máli er að skilja að tjáning okkar er í grunninn þrískipt. Gróflega má áætla að 60% af samskiptum okkar snúist um að skilja líðan hvors annars. 30% er hegðun okkar og aðeins 10% er hvað við raunverulega segjum. Þannig þurfum við að skilja að líðan eins aðila er öðrum fullkomlega ljós, án þess að um það séu höfð nokkur orð, eða að neitt komi fram sem gefur það í skyn annað en samveran. Það er kallað tilfinningasmit þegar slík líðan færist yfir frá einum aðila til annars.&lt;/p&gt;
+
+&lt;p&gt;Því verður tal okkar og hegðun oft staðfesting á einhverjum eiginleikum okkar sem eru öðrum ljósir en ekki okkur sjálfum. Við sjálf erum ekki að skilgreina og skoða okkar eigin líðan. Okkur finnst óþægilegt að vera kvíðin og höfum tilhneigingu til að deyfa það með hegðun sem getur orðið að þráhyggju, leitt til einangrun okkar eða að við sýnum umhverfinu uppreisn. Við viljum frekar deyfa kvíða með lyfjum, áfengi, eiturlyfjum, meðvirknihegðun eða hvers kyns þráhyggjuhegðun í stað þess að takast á við þau áreiti sem valda okkur kvíða. Þannig verður líðan okkar og eiginleikar oft öðrum sýnilegir þótt við höldum sjálf nístingsfast í afneitunina og reynum að þvinga allt í eitthvað óskilgreint far eða lífsviðhorf sem við viljum halda í.&lt;/p&gt;
+
+&lt;p&gt;Heimildir:&lt;/p&gt;
+
+&lt;p&gt;Gosling, Sam. (2009). Mixed Signals. Psychology Today. Október, bls. 64 -71.&lt;/p&gt;
+
+&lt;p&gt;Gosling, Sam. (2009). Snoop: What Your Stuff Says About You.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>VOFIR STREITA OG VANLÍÐAN YFIR SUMARFRÍINU ÞÍNU?</title>
+      <link>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/streita-i-sumarfri/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://bjornvernhardsson.github.io/hugfari/blog/2007/10/10/streita-i-sumarfri/</guid>
+      <description>&lt;p&gt;Sumarleyfi og sumarfrí geta verið streituvaldandi. Það er algengt að starfsfólk komi ekki afslappað og endurnært til vinnu eftir sumarleyfi út af áhyggjum af netpósti sem gæti hafa borist og liggur ósvaraður, skýrslum sem þarf að ganga frá eða öðrum daglegum störfum sem mögulega hafa hlaðist upp í leyfinu. Heltekur streita og vanlíðan sumarfríið þitt? Hvað er þá til bragðs að taka?&lt;/p&gt;
+
+&lt;p&gt;Margir reyna að hafa undan með því að svara netpóstinum úr símanum eða heimatölvunni, svara símtölum eða jafnvel fara til vinnu dag og dag. Það er af sem áður var þegar hægt var að slíta tengslin fullkomlega við vinnustaðinn og láta sig hverfa vikum saman. Það er erfiðara að aftengja sig vinnustaðnum þegar tæknin býður upp á fjarvinnslu og vekur jafnvel upp sektarkennd hjá þeim sem langar að eiga vinnulaust frí en eiga erfitt með að draga mörkin. Óvissutímar gera starfsmenn enn áhyggjufyllri um sitt starf á öllum tímum. Líka í sumarfríinu. Ef slíkar áhyggjur og ótti eru of miklar verður það til þess að hvíldin verður ekki jafn áhrifarík, síþreyta gerir vart við sig, streitan eykst í stað þess að minnka eða hverfa og altt þetta verður til þess að batteríin endurhlaðast ekki fyrir átökin framundan. Skapofsi, rifrildi eða einmanaleiki geta látið á sér kræla. Fólkið getur jafnvel komið þreyttara úr fríi heldur en það var áður en það fór í fríið sökum þess að það naut ekki frítímans og gerði þau verk sem sinna þurfti hugsanlega ekki eins vel og vanalega. Kvíði og streita myndast gjarnan vegna mikils vinnuálags og ótta um það sem bíður í vinnunni á mánudeginum mikla, hvort sem það er eftir helgarfrí eða sumarleyfi.&lt;/p&gt;
+
+&lt;p&gt;Það tekur fólk einhverja daga, allt að viku, að ná sér niður í fríinu og fara að njóta þess að gera ekki neitt og hafa ekki áhyggjur af neinu. Ef þér finnst þú ekki vera að ná tökum á þinni líðan í sumarleyfinu og/eða finnur fyrir streitu eða jafnvel þunglyndi er ágætt að skoða eftirfarandi atriði.&lt;/p&gt;
+
+&lt;p&gt;Vegna starfsins:
+* Sjáðu til þess að vinnufélagar hafi góða lýsingu á því hvers þeir þurfa í þinni fjarveru. Það er vissulega gott að finnast maður vera ómissandi, en enn betra að geta sleppt tökum á vinnuhagsmununum í nokkra daga og muna að það er fleira sem skiptir máli í lífinu.
+* Síaðu netpóst í áríðandi og síður áríðandi.
+* Undirbúðu þína skjólstæðinga eða samstarfsaaðila um hvernig hægt sé að leysa mál í þinni fjarveru.
+* Takmarkaðu samband þitt við vinnustaðinn. Ef þú nauðsynlega þarft að fylgjast með skaltu reyna að takmarka það við ákveðinn tíma dags eða ákveðna daga vikunnar.
+* Byrjaðu vinnudag eftir frí á því að heilsa samstarfsfólkinu og léttum umræðum í stað þess að hella sér strax í tölvupóstinn eða aðra tölvuvinnslu.&lt;/p&gt;
+
+&lt;p&gt;Vegna þín sjálfs:
+* Notaðu fríið til að hitta vini og rækta félagsleg tengsl. Ef þú sinnir ekki vinum þínum og kunningjum aukast líkurnar á að þú finnir fyrir félagslegri einangrun og verðir einmana síðar meir.
+* Notaðu fríið til að átta þig á því hvað skiptir þig mestu máli í lífinu. Ertu að sinna fjölskyldu sem skyldi? Er fjölskyldan að fá þann forgang í þínu lífi sem hún á skilið og þú í raun þarfnast? Hugsaðu málin frekar á þann veginn „Hvað vil ég og hvað ætla ég að gera í því?“ en ekki „Hvað vil ég og hvað eiga þau að gera í því?“.
+* Snúast samskiptin við fjölskylduna aðallega um þig eða þau? Er mikið um átök og rifrildi? Finnurðu fyrir pirringi eða ofsabræði þegar þú ert í kringum fjölskyldumeðlimi? Eða jafnvel stjórnleysi? Getur þú fundið lausnir þar sem þeirra hagsmunir og þínir fara fyllilega saman?
+* Er athygli þín við það sem þú ert að gera í fríinu? Getur þú notið einfaldra hluta eins og sundferð eða veiðiferð án þess að vera með hugann við starfið og vinnutengd vandamál? Er leiði eða þungar hugsandi vofandi yfir öllu sem þú tekur þér fyrir hendur?
+* Gerðu sem mest af því að fara eitthvað og gera eitthvað. Stutt ferð í sumarbústað, í sund, gönguferðir, heimsókn á söfn eða ferðir með Ferðafélaginu eða Útivist eru ekki dýrar lausnir og eru ekki síðri en aðrir valkostir til að koma hugarfarinu í gott jafnvægi og hleður þig orku. Umfram allt eru slíkar reynsluferðir mikilvægar í því að dreifa huganum og hjálpa þér að hugsa um aðra hluti.
+* Námskeið eða önnur hópavinna er mjög góð til þess að halda þér ferskum og gefur þér nýja sýn á lífið og vinnuna.&lt;/p&gt;
+
+&lt;p&gt;Ef ekki neitt af þessu eða öðrum lausnum fær þig til þess að líða betur er mikilvægt að leita sér aðstoðar. Mögulega ertu undir of miklu vinnuálagi í starfi. Ef svo er þarf meðal annars að skoða hvort hægt sé að dreifa vinnuálaginu, fá aðstoð við verkefni eða vélvæða annað. Kannski má athuga hvort breytingar í starfi gætu létt undir með þér. Hugsanlega þarft þú einfaldlega aukna þjálfun eða þekkingu til þess að ná betri tökum á starfinu þínu.&lt;/p&gt;
+
+&lt;p&gt;Mögulega er vinnan að verða þér ofviða og þú þá farin(n) að finna fyrir merkjum um kulnun (burnout) í starfi og þarft aðstoð við að vinna úr því. Starfsgleðin er þá ekki sú sama og áður eða samstarfið við viðskiptavini og/eða samstarfsfólkið ekki eins og það var áður. Ef þaðer tilfellið er mjög mikilvægt að fá aðstoð, t.d. fá utanaðkomandi aðila til að leggja mat á aðstæður og vinna úr málum. Forðastu að láta málin danka þannig að vanlíðan og streita stigmagnist og fari að verða stöðug líðan í starfi og jafnvel allan daginn, alla daga. Það er alger óþarfi að láta sér líða illa þegar til er fjöldinn allur af mögulegum lausnum sem hægt væri að prófa.&lt;/p&gt;
+
+&lt;p&gt;Björn Vernharðsson sálfræðingur&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Einstaklingar</title>
-      <link>https://www.hugfari.com/einstaklingar/</link>
+      <link>https://bjornvernhardsson.github.io/hugfari/einstaklingar/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://www.hugfari.com/einstaklingar/</guid>
+      <guid>https://bjornvernhardsson.github.io/hugfari/einstaklingar/</guid>
       <description>
 
 &lt;p&gt;Setja hér inn fróðleik&lt;/p&gt;
@@ -1812,10 +877,10 @@ $ vi themes/zafta/layouts/_default/single.html
     
     <item>
       <title>Fyrirtækjaráðgjöf</title>
-      <link>https://www.hugfari.com/fyrirtaeki/</link>
+      <link>https://bjornvernhardsson.github.io/hugfari/fyrirtaeki/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://www.hugfari.com/fyrirtaeki/</guid>
+      <guid>https://bjornvernhardsson.github.io/hugfari/fyrirtaeki/</guid>
       <description>
 
 &lt;p&gt;Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo.&lt;/p&gt;
@@ -1868,109 +933,11 @@ $ vi themes/zafta/layouts/_default/single.html
     
     <item>
       <title>Panta tíma</title>
-      <link>https://www.hugfari.com/pantatima/</link>
+      <link>https://bjornvernhardsson.github.io/hugfari/contact/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://www.hugfari.com/pantatima/</guid>
+      <guid>https://bjornvernhardsson.github.io/hugfari/contact/</guid>
       <description>&lt;p&gt;Hér er hægt að panta tíma hjá sálfræðingi. Vinsamlegast fyllið út reitina til að senda fyrirspurn um æskilegar tímasetningar. Þú verður látin(n) vita hvaða tímar eru lausir á tímabilinu. Einnig má hringja í 866-0149.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>ÞARF ÉG MEÐFERÐ?</title>
-      <link>https://www.hugfari.com/tharfegmedferd/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://www.hugfari.com/tharfegmedferd/</guid>
-      <description>
-
-&lt;p&gt;Það er alltaf álitamál hvort einstaklingur þurfi að leita sér aðstoðar eða koma í meðferð hjá sálfræðingi en hér eru nokkrar spurningar sem geta hjálpað þér við að meta þína líðan. Þær eru byggðar á lauslegri þýðingu á skala sem heitir Epstein Mental Health Inventory (Robert Epstein, 2010) ásamt því að hafa verið aðlagaðar að íslenskum aðstæðum.&lt;/p&gt;
-
-&lt;h3 id=&#34;hvatvísi-reiði-og-reiðistjórnun&#34;&gt;Hvatvísi, reiði og reiðistjórnun&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég á stundum erfitt með að hafa stjórn á reiðinni innra með mér.&lt;/li&gt;
-&lt;li&gt;Ég er oft hvatvís og það skapar mér oft erfiðleika í samskiptum við aðra.&lt;/li&gt;
-&lt;li&gt;Ég á það til að sökkva mér í veðmál (tölvur eða spil) og á oft erfitt með að hafa stjórn á hegðun minni.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;fíkn-eða-fíknhegðun&#34;&gt;Fíkn eða fíknhegðun&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég hef neytt meira síðasta árið en áður og þarf meira en áður.&lt;/li&gt;
-&lt;li&gt;Ég hef reynt árangurslaust að hemja mína neyslu síðasta árið.&lt;/li&gt;
-&lt;li&gt;Neysla mín hefur valdið stöðugt verri samskiptum heima fyrir eða í starfi.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;þunglyndi&#34;&gt;Þunglyndi&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég hef átt erfitt með að fá nokkra ánægju af daglegum athöfnum síðustu tvær vikurnar.&lt;/li&gt;
-&lt;li&gt;Ég hef átt erfitt með að finna til lífslöngunar síðustu tvær vikurnar.&lt;/li&gt;
-&lt;li&gt;Mér finnst eins og mér hafi liðið verr og verr dag hvern síðustu tvær vikurnar.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;fælni&#34;&gt;Fælni&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég óttast mjög mikið að fara í einstaka aðstæður og það hamlar mér í mínu daglega lífi.&lt;/li&gt;
-&lt;li&gt;Ég óttast mikið suma hluti eða sumar aðstæður og ég held að þessi ótti minn sé óhóflegur.&lt;/li&gt;
-&lt;li&gt;Ég óttast mjög aðstæður þar sem ég þarf að hafa samskipti við fólk.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;átröskun&#34;&gt;Átröskun&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég borða oft mjög mikið og síðan fer ég og æli því eða nota laxerandi til að halda mér í formi.&lt;/li&gt;
-&lt;li&gt;Ég er mjög upptekin af þyngd minni og formi og borða því og haga mér á þann máta sem gæti talist vera óvenjulegur.&lt;/li&gt;
-&lt;li&gt;Ég vil helst ekki borða eða melta neitt til þess að halda eðlilegri þyngd.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;áfall&#34;&gt;Áfall&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Mér finnst ég oft hafa óþægilegar minningar tengdar áfalli sem ég varð fyrir.&lt;/li&gt;
-&lt;li&gt;Mig dreymir oft illa um hræðilega minningar eða erfiða lífsreynslu&lt;/li&gt;
-&lt;li&gt;Mér finnst ég oft endurupplifa hræðilegt áfall sem ég hef orðið fyrir.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;kvíði-og-kvíðaröskun&#34;&gt;Kvíði og kvíðaröskun&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Síðustu sex mánuði hef ég fengið kvíðakast sem var erfitt að stjórna&lt;/li&gt;
-&lt;li&gt;Síðustu sex mánuði hef ég verið mjög áhyggjufull/ur um margvísleg atriði eða atburði.&lt;/li&gt;
-&lt;li&gt;Síðustu sex mánuði hef ég fundið mjög mikið fyrir óróa, mikilli þreytu, uppstökk/ur, uppspennt/ur eða átt erfitt með að einbeita mér.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;geðhvörf-eða-geðhvarfasýki&#34;&gt;Geðhvörf eða geðhvarfasýki&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Síðasta árið hef ég átt við miklar óútskýrðar skapsveiflur&lt;/li&gt;
-&lt;li&gt;Síðasta árið hefur skapið sveiflast frá þunglyndi til mikils hugaræsings án nokkurrar ástæðu&lt;/li&gt;
-&lt;li&gt;Síðasta árið hafa komið miklar skapsveiflur oftar en einu sinni.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;þráhyggja&#34;&gt;Þráhyggja&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Ég á erfitt með að stoppa síendurtekna hegðun.&lt;/li&gt;
-&lt;li&gt;Ákveðnar sterkar hugsanir koma síendurtekið og valda mér miklum kvíða og ég held að þessar hugsanir sé órökréttar og of miklar.&lt;/li&gt;
-&lt;li&gt;Ég geri ákveðna hluti eða hugsa ákveðna hluti aftur og aftur til að róa mig niður og forða því að eitthvað vont komi fyrir mig.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;hvernig-les-maður-svo-úr-þessu&#34;&gt;Hvernig les maður svo úr þessu?&lt;/h3&gt;
-
-&lt;p&gt;Þetta er ekki próf heldur lausleg skimun. Ef þú hefur merkt við eitt og eitt atriði að þá er gott að ræða um það við þína nánustu, en það er ekki líklegt að þú þurfir meðferð eða þurfir að leita til fagaðila út af því, ekki nema ef þér finnist það há þér og þú viljir vinna kerfisbundið bug á því.&lt;/p&gt;
-
-&lt;p&gt;Ef þú hefur merkt við tvö eða þrjú atriði í einhverjum af þessum flokkum, að þá er ráðlegt að leita aðstoðar fagaðila. Flest af þessum atriðum er hægt að vinna bug á með samtalsmeðferð eða lyfjagjöf eða blöndu af bæði. Mörg af þessum atriðum er hægt að vinna bug á með breyttu hugarfari og breyttri hegðun.&lt;/p&gt;
-
-&lt;p&gt;Björn Vernharðsson&lt;/p&gt;
-
-&lt;p&gt;Heimild:
-Robert Epstein. (2010). Are You Mentally Healthy? Scientific American Mind. March/April. Bls 59.&lt;/p&gt;
-
-&lt;p&gt;Hjóna- og parameðferðir Fjármálaráðgjöf Viðbrögð við ofbeldi og nauðgun  Fyrirtækjaráðgjöf
-Viðbrögð við einelti Viðbrögð við áreiti Áfallahjálp Áhættumat Bráðaþjónusta Einstaklingsmeðferðir Samskiptaþjálfun og stjórnendaráðgjöf Hópsamstarf (Teams) Funda- og ráðstefnustjórnun Sáttamiðlun  Fróðleikur  Panta tíma&lt;/p&gt;
 </description>
     </item>
     
