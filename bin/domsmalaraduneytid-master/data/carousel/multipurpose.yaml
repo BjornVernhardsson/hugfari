@@ -1,0 +1,13 @@
+weight: 2
+title: "Fyrirtækjaráðgjöf"
+description: >
+  <ul class="list-style-none">
+     <li>Bráðaþjónusta</li>
+     <li>Stjórnendaráðgjöf</li>
+     <li>Samskiptaþjálfun</li>
+     <li>Sáttamiðlun</li>
+     <li>Viðbrögð við þroti</li>
+     <li>Viðbrögð við einelti</li>
+     <li>Viðbrögð við áreiti</li>
+   </ul>
+image: "img/carousel/fyrirtaeki.png"

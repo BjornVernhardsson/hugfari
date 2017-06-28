@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Timarim.Is on Dómsmálaráðuneytið.is</title>
+    <link>https://www.domsmalaraduneytid.is/tags/timarim.is/</link>
+    <description>Recent content in Timarim.Is on Dómsmálaráðuneytið.is</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Copyright (c) 2014 - 2017, Hugfari; all rights reserved.</copyright>
+    <lastBuildDate>Wed, 10 Oct 2007 13:07:31 +0200</lastBuildDate>
+    
+	<atom:link href="https://www.domsmalaraduneytid.is/tags/timarim.is/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Tímarím er áhugaverð síða</title>
+      <link>https://www.domsmalaraduneytid.is/blog/2007/10/10/timarim/</link>
+      <pubDate>Wed, 10 Oct 2007 13:07:31 +0200</pubDate>
+      
+      <guid>https://www.domsmalaraduneytid.is/blog/2007/10/10/timarim/</guid>
+      <description>Ég vil endilega benda fólki á skrif Ólafs Arnarsonar á www.timarim.is en þar fjallar Ólafur oft um málefni lánamála og framkvæmdina á réttarfarinu hér á Íslandi.</description>
+    </item>
+    
+  </channel>
+</rss>
